@@ -14,6 +14,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <sonar.organization>hibiscus3000</sonar.organization>
+        <sonar.projectKey>Hibiscus3000_Midpoint-Sonar</sonar.projectKey>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
