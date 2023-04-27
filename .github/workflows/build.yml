@@ -17,7 +17,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: 19
-          distribution: 'openJDK'
+          distribution: 'OpenJDK'
       - name: Cache SonarCloud packages
         uses: actions/cache@v3
         with:
@@ -34,4 +34,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ls
         run: mvn clean verify sonar:sonar -DSONAR_TOKEN_CMD= ${{ secrets.SONAR_TOKEN }}
