@@ -31,3 +31,4 @@ jobs:
     - name: Run Test with Maven
       working-directory: MidpointSonar
       run: mvn clean test 
+
