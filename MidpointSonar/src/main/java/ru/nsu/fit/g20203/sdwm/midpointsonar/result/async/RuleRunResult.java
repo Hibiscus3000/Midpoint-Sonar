@@ -6,16 +6,17 @@ import ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.RuleOperationResult;
 
 import java.util.Collection;
 
-public class RuleRunResult {
+public class RuleRunResult extends AsyncResult {
 
     private final RuleOperationResult ruleOperationResult;
     private final RuleLoadResult ruleLoadResult;
     private final Status ruleRunStatus;
     private final Collection<MidPointSonarObject> objects;
 
-    public RuleRunResult(RuleOperationResult ruleOperationResult,
+    public RuleRunResult(Long id, RuleOperationResult ruleOperationResult,
                          RuleLoadResult ruleLoadResult, Status ruleRunStatus,
                          Collection<MidPointSonarObject> objects) {
+        super(id);
         this.ruleOperationResult = ruleOperationResult;
         this.ruleLoadResult = ruleLoadResult;
         this.ruleRunStatus = ruleRunStatus;

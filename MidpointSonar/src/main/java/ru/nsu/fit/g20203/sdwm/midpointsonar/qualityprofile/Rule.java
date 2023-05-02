@@ -2,9 +2,13 @@ package ru.nsu.fit.g20203.sdwm.midpointsonar.qualityprofile;
 
 import ru.nsu.fit.g20203.sdwm.midpointsonar.midpoint.ServerTask;
 
-public interface Rule {
+public abstract class Rule {
 
-    String getName();
+    public String name;
 
-    ServerTask getServerTask();
+    public String getName() {
+        return name;
+    }
+
+    public abstract ServerTask getServerTask();
 }

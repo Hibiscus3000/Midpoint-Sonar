@@ -4,12 +4,14 @@ import ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.QPOperationResult;
 
 import java.util.Collection;
 
-public class QPRunResult {
+public class QPRunResult extends AsyncResult {
 
     private final Collection<RuleRunResult> ruleRunResults;
     private final QPOperationResult qpOperationResult;
 
-    public QPRunResult(Collection<RuleRunResult> ruleRunResults, QPOperationResult qpOperationResult) {
+    public QPRunResult(Long id,
+                       Collection<RuleRunResult> ruleRunResults, QPOperationResult qpOperationResult) {
+        super(id);
         this.ruleRunResults = ruleRunResults;
         this.qpOperationResult = qpOperationResult;
     }

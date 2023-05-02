@@ -7,8 +7,8 @@ import java.util.Collection;
 public abstract class QualityProfile {
 
     private String name;
-
-    String getName() {
+    
+    public String getName() {
         return name;
     }
 
