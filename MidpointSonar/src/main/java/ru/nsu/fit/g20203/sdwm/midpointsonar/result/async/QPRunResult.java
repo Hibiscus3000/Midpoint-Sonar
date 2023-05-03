@@ -3,6 +3,7 @@ package ru.nsu.fit.g20203.sdwm.midpointsonar.result.async;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.QPOperationResult;
 
 import java.util.Collection;
+import java.util.concurrent.Future;
 
 public class QPRunResult extends AsyncResult {
 
@@ -18,5 +19,9 @@ public class QPRunResult extends AsyncResult {
 
     public Collection<RuleRunResult> getRuleRunResults() {
         return ruleRunResults;
+    }
+
+    public QPOperationResult getQpOperationResult() {
+        return qpOperationResult;
     }
 }
