@@ -24,8 +24,9 @@ public class RulesAndQPManagerClass implements RulesAndQPManager {
     }
     @Override
     public QPOperationResult createNewQualityProfile(String profileName) {
-        if (qpRepository.findByName(profileName) != null) {
-            return new QPOperationResult(QPOperationResult.QPOperationStatus.QP_WITH_GIVEN_NAME_ALREADY_EXISTS, null);
+        QualityProfile oldQ = qpRepository.findByName(profileName);
+        if (oldQ != null) {
+            return new QPOperationResult(QPOperationResult.QPOperationStatus.QP_WITH_GIVEN_NAME_ALREADY_EXISTS, oldQ);
         }
         QualityProfile qp = new QualityProfile(profileName);
         qpRepository.save(qp);
