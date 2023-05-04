@@ -18,11 +18,13 @@ import static ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.RuleOperationResu
 public class RulesAndQPManagerClass implements RulesAndQPManager {
     private final QPRepository qpRepository;
     private final RuleRepository ruleRepository;
+
     @Autowired
     public RulesAndQPManagerClass(QPRepository qpRepository,RuleRepository ruleRepository){
         this.qpRepository = qpRepository;
         this.ruleRepository = ruleRepository;
     }
+
     @Override
     public QPOperationResult createNewQualityProfile(String profileName) {
         QualityProfile oldQ = qpRepository.findByName(profileName);
@@ -33,6 +35,7 @@ public class RulesAndQPManagerClass implements RulesAndQPManager {
         qpRepository.save(qp);
         return new QPOperationResult(QPOperationResult.QPOperationStatus.SUCCESS, qp);
     }
+
     @Override
     public QPOperationResult renameQualityProfile(String oldName, String newName) {
         QualityProfile qp = qpRepository.findByName(oldName);
@@ -53,7 +56,7 @@ public class RulesAndQPManagerClass implements RulesAndQPManager {
     public QPOperationResult removeQualityProfile(String profileName) {
         QualityProfile qp = qpRepository.findByName(profileName);
         if (qp == null){
-            return new QPOperationResult(NO_SUCH_QUALITY_PROFILE, qp);
+            return new QPOperationResult(NO_SUCH_QUALITY_PROFILE, new QualityProfile(profileName));
         }
         qpRepository.delete(qp);
         return new QPOperationResult(QPOperationResult.QPOperationStatus.SUCCESS, null);

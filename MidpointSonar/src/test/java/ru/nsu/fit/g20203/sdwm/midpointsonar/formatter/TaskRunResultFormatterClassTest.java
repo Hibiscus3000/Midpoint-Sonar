@@ -27,7 +27,7 @@ class TaskRunResultFormatterClassTest {
 
     @Test
     void formatRuleLoadResultNoSuch() {
-        Rule rule = new Rule() {
+        Rule rule = new Rule("example") {
             @Override
             public ServerTask getServerTask() {
                 return null;
@@ -53,7 +53,7 @@ class TaskRunResultFormatterClassTest {
 
     @Test
     void formatRuleLoadResultSuccess() throws ExecutionException, InterruptedException {
-        Rule rule = new Rule() {
+        Rule rule = new Rule("example") {
             @Override
             public ServerTask getServerTask() {
                 return null;
@@ -79,7 +79,7 @@ class TaskRunResultFormatterClassTest {
 
     @Test
     void formatRuleRunResultNoSuch() {
-        Rule rule = new Rule() {
+        Rule rule = new Rule("example") {
             @Override
             public ServerTask getServerTask() {
                 return null;
@@ -110,7 +110,7 @@ class TaskRunResultFormatterClassTest {
 
     @Test
     void formatRuleRunResultSuccess() {
-        Rule rule = new Rule() {
+        Rule rule = new Rule("example") {
             @Override
             public ServerTask getServerTask() {
                 return null;
@@ -141,7 +141,7 @@ class TaskRunResultFormatterClassTest {
 
     @Test
     void formatQPRunResultSuccess() {
-        Rule rule = new Rule() {
+        Rule rule = new Rule("example") {
             @Override
             public ServerTask getServerTask() {
                 return null;
