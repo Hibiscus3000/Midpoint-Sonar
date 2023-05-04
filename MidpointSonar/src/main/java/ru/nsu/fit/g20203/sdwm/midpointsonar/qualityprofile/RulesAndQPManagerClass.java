@@ -8,6 +8,8 @@ import ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.QPOperationResult;
 
 import java.util.Collection;
 
+import static ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.QPOperationResult.QPOperationStatus.NO_SUCH_QUALITY_PROFILE;
+
 public class RulesAndQPManagerClass implements RulesAndQPManager {
     private final QPRepository qpRepository;
     private final RuleRepository ruleRepository;
@@ -27,7 +29,12 @@ public class RulesAndQPManagerClass implements RulesAndQPManager {
 
     @Override
     public QPOperationResult removeQualityProfile(String profileName) {
-        return null;
+        QualityProfile qp = qpRepository.findByName(profileName);
+        if (qp == null){
+            return new QPOperationResult(NO_SUCH_QUALITY_PROFILE, null);
+        }
+        qpRepository.delete(qp);
+        return new QPOperationResult(QPOperationResult.QPOperationStatus.SUCCESS, null);
     }
 
     @Override
