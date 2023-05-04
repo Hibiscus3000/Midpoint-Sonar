@@ -11,7 +11,8 @@ import ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.RuleOperationResult;
 import java.util.Collection;
 
 import static ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.QPOperationResult.QPOperationStatus.NO_SUCH_QUALITY_PROFILE;
-import static ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.QPOperationResult.QPOperationStatus.SUCCESS;
+import static ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.RuleOperationResult.RuleOperationStatus.SUCCESS;
+
 
 @Service
 public class RulesAndQPManagerClass implements RulesAndQPManager {
@@ -36,11 +37,12 @@ public class RulesAndQPManagerClass implements RulesAndQPManager {
     public QPOperationResult renameQualityProfile(String oldName, String newName) {
         QualityProfile qp = qpRepository.findByName(oldName);
         if (qp == null){
-            return new QPOperationResult(NO_SUCH_QUALITY_PROFILE,null);
+            return new QPOperationResult(NO_SUCH_QUALITY_PROFILE, new QualityProfile(oldName));
         }
         qp.setName(newName);
         if (qpRepository.findByName(newName) != null) {
-            return new QPOperationResult(QPOperationResult.QPOperationStatus.QP_WITH_GIVEN_NAME_ALREADY_EXISTS, null);
+            return new QPOperationResult(QPOperationResult.QPOperationStatus.QP_WITH_GIVEN_NAME_ALREADY_EXISTS,
+                                        new QualityProfile(newName));
         }
         qpRepository.save(qp);
         return new QPOperationResult(QPOperationResult.QPOperationStatus.SUCCESS, qp);
@@ -51,7 +53,7 @@ public class RulesAndQPManagerClass implements RulesAndQPManager {
     public QPOperationResult removeQualityProfile(String profileName) {
         QualityProfile qp = qpRepository.findByName(profileName);
         if (qp == null){
-            return new QPOperationResult(NO_SUCH_QUALITY_PROFILE, null);
+            return new QPOperationResult(NO_SUCH_QUALITY_PROFILE, qp);
         }
         qpRepository.delete(qp);
         return new QPOperationResult(QPOperationResult.QPOperationStatus.SUCCESS, null);
@@ -62,9 +64,9 @@ public class RulesAndQPManagerClass implements RulesAndQPManager {
         QualityProfile qp =  qpRepository.findByName(profileName);
         if (qp == null){
             return new QPAndRuleOperationResult(QPAndRuleOperationResult.QPAndRuleOperationStatus.SUCCESS,
-                    new QPOperationResult(NO_SUCH_QUALITY_PROFILE,null),
+                    new QPOperationResult(NO_SUCH_QUALITY_PROFILE, new QualityProfile(profileName)),
                     new RuleOperationResult(RuleOperationResult.RuleOperationStatus.SUCCESS,
-                            new QualityProfile(profileName)));
+                            new Rule(ruleName)));
         }
         Rule rule = ruleRepository.findByName(ruleName);
         if (rule == null){
@@ -73,7 +75,7 @@ public class RulesAndQPManagerClass implements RulesAndQPManager {
                     new RuleOperationResult(RuleOperationResult.RuleOperationStatus.NO_SUCH_RULE,
                             new Rule(ruleName)));
         }
-        QPOperationResult qpr = qp.addRule(rule);
+        RuleOperationResult qpr = qp.addRule(rule);
         if (qpr.getStatus() == SUCCESS){
             qpRepository.save(qp);
             return new QPAndRuleOperationResult(QPAndRuleOperationResult.QPAndRuleOperationStatus.SUCCESS,
@@ -94,9 +96,9 @@ public class RulesAndQPManagerClass implements RulesAndQPManager {
         QualityProfile qp =  qpRepository.findByName(profileName);
         if (qp == null) {
             return new QPAndRuleOperationResult(QPAndRuleOperationResult.QPAndRuleOperationStatus.SUCCESS,
-                    new QPOperationResult(NO_SUCH_QUALITY_PROFILE, null),
+                    new QPOperationResult(NO_SUCH_QUALITY_PROFILE, new QualityProfile(profileName)),
                     new RuleOperationResult(RuleOperationResult.RuleOperationStatus.SUCCESS,
-                            new QualityProfile(profileName)));
+                            new Rule(ruleName)));
         }
         Rule rule = ruleRepository.findByName(ruleName);
         if (rule == null) {
@@ -105,7 +107,7 @@ public class RulesAndQPManagerClass implements RulesAndQPManager {
                     new RuleOperationResult(RuleOperationResult.RuleOperationStatus.NO_SUCH_RULE,
                             new Rule(ruleName)));
         }
-        QPOperationResult qpr = qp.removeRule(ruleName);
+        RuleOperationResult qpr = qp.removeRule(ruleName);
         if (qpr.getStatus() == SUCCESS){
             qpRepository.save(qp);
             return new QPAndRuleOperationResult(QPAndRuleOperationResult.QPAndRuleOperationStatus.SUCCESS,

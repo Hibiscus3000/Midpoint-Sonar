@@ -7,6 +7,9 @@ public class Rule {
     private String name;
     private ServerTask serverTask;
 
+    public Rule(String name) {
+        this.name = name;
+    }
     public String getName() {
         return name;
     }
