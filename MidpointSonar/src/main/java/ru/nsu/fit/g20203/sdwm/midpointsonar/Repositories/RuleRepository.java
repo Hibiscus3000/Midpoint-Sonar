@@ -1,4 +1,4 @@
-package ru.nsu.fit.g20203.sdwm.midpointsonar.qualityprofile.Repositories;
+package ru.nsu.fit.g20203.sdwm.midpointsonar.Repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.qualityprofile.Rule;

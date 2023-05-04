@@ -11,7 +11,7 @@ public interface RunHistory {
 
     RuleLoadResult getLoadResult(Long loadId);
 
-    Collection<QPRunResult> getRunHistory();
+    Iterable<QPRunResult> getRunHistory();
 
-    Collection<RuleLoadResult> getLoadHistory();
+    Iterable<RuleLoadResult> getLoadHistory();
 }

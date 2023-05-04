@@ -2,8 +2,8 @@ package ru.nsu.fit.g20203.sdwm.midpointsonar.qualityprofile;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.nsu.fit.g20203.sdwm.midpointsonar.qualityprofile.Repositories.QPRepository;
-import ru.nsu.fit.g20203.sdwm.midpointsonar.qualityprofile.Repositories.RuleRepository;
+import ru.nsu.fit.g20203.sdwm.midpointsonar.Repositories.QPRepository;
+import ru.nsu.fit.g20203.sdwm.midpointsonar.Repositories.RuleRepository;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.QPAndRuleOperationResult;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.QPOperationResult;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.RuleOperationResult;
