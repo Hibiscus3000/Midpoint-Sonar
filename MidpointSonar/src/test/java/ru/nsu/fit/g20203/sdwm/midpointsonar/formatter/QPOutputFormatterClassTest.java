@@ -9,10 +9,9 @@ import ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.QPOperationResult;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.RuleOperationResult;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.QPAndRuleOperationResult.QPAndRuleOperationStatus.RULE_NOT_IN_QP;
 import static ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.QPOperationResult.QPOperationStatus.NO_SUCH_QUALITY_PROFILE;
 import static ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.QPOperationResult.QPOperationStatus.SUCCESS;
@@ -56,22 +55,7 @@ class QPOutputFormatterClassTest {
     @Test
     void formatQPOperationResultNoSuch() {
         QPOutputFormatter qpOutputFormatter = new QPOutputFormatterClass();
-        QualityProfile qualityProfile = new QualityProfile() {
-            @Override
-            public QPOperationResult addRule(Rule rule) {
-                return null;
-            }
-
-            @Override
-            public QPOperationResult removeRule(String ruleName) {
-                return null;
-            }
-
-            @Override
-            public Collection<Rule> getAllRules() {
-                return null;
-            }
-        };
+        QualityProfile qualityProfile = new QualityProfile("null");
         QPOperationResult qpOperationResult = new QPOperationResult(NO_SUCH_QUALITY_PROFILE, qualityProfile);
 
         String expected = "There is no Quality Profile with name null\n";
@@ -83,22 +67,7 @@ class QPOutputFormatterClassTest {
     @Test
     void formatQPOperationResultSuccess() {
         QPOutputFormatter qpOutputFormatter = new QPOutputFormatterClass();
-        QualityProfile qualityProfile = new QualityProfile() {
-            @Override
-            public QPOperationResult addRule(Rule rule) {
-                return null;
-            }
-
-            @Override
-            public QPOperationResult removeRule(String ruleName) {
-                return null;
-            }
-
-            @Override
-            public Collection<Rule> getAllRules() {
-                return null;
-            }
-        };
+        QualityProfile qualityProfile = new QualityProfile("null");
         QPOperationResult qpOperationResult = new QPOperationResult(SUCCESS, qualityProfile);
 
         String expected = "Success on Quality Profile with name null\n";
@@ -128,22 +97,7 @@ class QPOutputFormatterClassTest {
     @Test
     void formatQpAndRuleOpResultNotIn() {
         QPOutputFormatter qpOutputFormatter = new QPOutputFormatterClass();
-        QualityProfile qualityProfile = new QualityProfile() {
-            @Override
-            public QPOperationResult addRule(Rule rule) {
-                return null;
-            }
-
-            @Override
-            public QPOperationResult removeRule(String ruleName) {
-                return null;
-            }
-
-            @Override
-            public Collection<Rule> getAllRules() {
-                return null;
-            }
-        };
+        QualityProfile qualityProfile = new QualityProfile("null");
         QPOperationResult qpOperationResult = new QPOperationResult(SUCCESS, qualityProfile);
         Rule rule = new Rule() {
             @Override

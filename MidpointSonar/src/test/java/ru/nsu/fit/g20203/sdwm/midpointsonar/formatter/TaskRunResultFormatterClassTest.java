@@ -14,13 +14,12 @@ import ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.RuleOperationResult;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static ru.nsu.fit.g20203.sdwm.midpointsonar.result.async.RuleLoadResult.RuleLoadStatus.ERROR;
 import static ru.nsu.fit.g20203.sdwm.midpointsonar.result.async.RuleLoadResult.RuleLoadStatus.SUCCESS;
 
@@ -164,23 +163,10 @@ class TaskRunResultFormatterClassTest {
         Future<Collection<MidPointSonarObject>> objects = CompletableFuture.completedFuture(midPointSonarObjectCollection);
         RuleRunResult ruleRunResult = new RuleRunResult(Long.valueOf(1), ruleLoadResult, ruleRunStatus, objects);
         ruleRunResult.setRuleOperationResult(ruleOperationResult);
-        List<RuleRunResult> ruleRunResults = new ArrayList<>() {{add(ruleRunResult);}};
-        QualityProfile qualityProfile = new QualityProfile() {
-            @Override
-            public QPOperationResult addRule(Rule rule) {
-                return null;
-            }
-
-            @Override
-            public QPOperationResult removeRule(String ruleName) {
-                return null;
-            }
-
-            @Override
-            public Collection<Rule> getAllRules() {
-                return null;
-            }
-        };
+        List<RuleRunResult> ruleRunResults = new ArrayList<>() {{
+            add(ruleRunResult);
+        }};
+        QualityProfile qualityProfile = new QualityProfile("null");
         QPOperationResult qpOperationResult = new QPOperationResult(QPOperationResult.QPOperationStatus.SUCCESS, qualityProfile);
         QPRunResult qpRunResult = new QPRunResult(Long.valueOf(1), ruleRunResults, qpOperationResult);
 

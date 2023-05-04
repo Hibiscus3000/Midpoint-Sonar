@@ -2,9 +2,10 @@ package ru.nsu.fit.g20203.sdwm.midpointsonar.qualityprofile;
 
 import ru.nsu.fit.g20203.sdwm.midpointsonar.midpoint.ServerTask;
 
-public abstract class Rule {
+public class Rule {
 
     private String name;
+    private ServerTask serverTask;
 
     public String getName() {
         return name;
@@ -14,5 +15,7 @@ public abstract class Rule {
         this.name = name;
     }
 
-    public abstract ServerTask getServerTask();
+    public ServerTask getServerTask() {
+        return serverTask;
+    }
 }

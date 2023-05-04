@@ -1,12 +1,19 @@
 package ru.nsu.fit.g20203.sdwm.midpointsonar.qualityprofile;
 
-import ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.QPOperationResult;
+import ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.RuleOperationResult;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
-public abstract class QualityProfile {
+public class QualityProfile {
 
     private String name;
+    private final Map<String, Rule> rules = new HashMap<>();
+
+    public QualityProfile(String name) {
+        this.name = name;
+    }
 
     public String getName() {
         return name;
@@ -16,9 +23,21 @@ public abstract class QualityProfile {
         this.name = name;
     }
 
-    public abstract QPOperationResult addRule(Rule rule);
+    public RuleOperationResult addRule(Rule rule) {
+        rules.put(rule.getName(), rule);
+        return new RuleOperationResult(RuleOperationResult.RuleOperationStatus.SUCCESS, rule);
+    }
 
-    public abstract QPOperationResult removeRule(String ruleName);
+    public RuleOperationResult removeRule(String ruleName) {
+        Rule rule;
+        if (null != (rule = rules.remove(ruleName))) {
+            return new RuleOperationResult(RuleOperationResult.RuleOperationStatus.SUCCESS, rule);
+        } else {
+            return new RuleOperationResult(RuleOperationResult.RuleOperationStatus.NO_SUCH_RULE, null);
+        }
+    }
 
-    public abstract Collection<Rule> getAllRules();
+    public Collection<Rule> getAllRules() {
+        return rules.values();
+    }
 }
