@@ -28,13 +28,13 @@ class QPOutputFormatterClassTest {
 
     @Test
     void lsRules() {
-        Rule rule1 = new Rule() {
+        Rule rule1 = new Rule("example") {
             @Override
             public ServerTask getServerTask() {
                 return null;
             }
         };
-        Rule rule2 = new Rule() {
+        Rule rule2 = new Rule("example") {
             @Override
             public ServerTask getServerTask() {
                 return null;
@@ -79,7 +79,7 @@ class QPOutputFormatterClassTest {
     @Test
     void formatRuleOperationResultSuccess() {
         QPOutputFormatter qpOutputFormatter = new QPOutputFormatterClass();
-        Rule rule = new Rule() {
+        Rule rule = new Rule("example") {
             @Override
             public ServerTask getServerTask() {
                 return null;
@@ -99,7 +99,7 @@ class QPOutputFormatterClassTest {
         QPOutputFormatter qpOutputFormatter = new QPOutputFormatterClass();
         QualityProfile qualityProfile = new QualityProfile("null");
         QPOperationResult qpOperationResult = new QPOperationResult(SUCCESS, qualityProfile);
-        Rule rule = new Rule() {
+        Rule rule = new Rule("example") {
             @Override
             public ServerTask getServerTask() {
                 return null;
@@ -121,7 +121,7 @@ class QPOutputFormatterClassTest {
 
     @Test
     void formatRule() {
-        Rule rule = new Rule() {
+        Rule rule = new Rule("example") {
             @Override
             public ServerTask getServerTask() {
                 return null;
