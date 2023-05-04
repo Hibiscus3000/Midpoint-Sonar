@@ -7,9 +7,13 @@ import java.util.Collection;
 public abstract class QualityProfile {
 
     private String name;
-    
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public abstract QPOperationResult addRule(Rule rule);
