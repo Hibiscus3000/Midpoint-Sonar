@@ -1,11 +1,12 @@
-FROM eclipse-temurin:18-jdk-alpine as jar_builder
-WORKDIR /opt/MidpointSonar
-RUN apk update && apk upgrade && apk add git \
-  && git clone https://github.com/Hibiscus3000/Midpoint-Sonar.git \
-  && apk add maven && maven clean install
+FROM eclipse-temurin:19-jdk-alpine as jar_builder
+WORKDIR /opt/
+RUN apk update && apk upgrade && apk add git && apk add maven \
+  && git clone https://github.com/Hibiscus3000/Midpoint-Sonar.git
+WORKDIR /opt/Midpoint-Sonar/MidpointSonar
+RUN mvn clean install
 
-FROM eclipse-temurin:18-jre-alpine
-WORKDIR /opt/MidpointSonar
-COPY --from=jar_builder /opt/MidpointSonar/target/*.jar /opt/MidpointSonar/*.jar
+FROM eclipse-temurin:19-jre-alpine
+WORKDIR /opt/Midpoint-Sonar/MidpointSonar
+COPY --from=jar_builder /opt/Midpoint-Sonar/MidpointSonar/target/*.jar /opt/Midpoint-Sonar/MidpointSonar/*.jar
 EXPOSE 15000
 ENTRYPOINT ["java", "-jar", "/opt/MidpointSonar/*.jar"]
