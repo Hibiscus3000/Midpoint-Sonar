@@ -86,7 +86,6 @@ public class RulesAndQPManagerClass implements RulesAndQPManager {
                     new RuleOperationResult(RuleOperationResult.RuleOperationStatus.SUCCESS,rule));
         }
         else {
-            qpRepository.save(qp);
             return new QPAndRuleOperationResult(QPAndRuleOperationResult.QPAndRuleOperationStatus.RULE_ALREADY_IN_QP,
                     new QPOperationResult(QPOperationResult.QPOperationStatus.SUCCESS, qp),
                     new RuleOperationResult(RuleOperationResult.RuleOperationStatus.SUCCESS, rule));
@@ -118,7 +117,6 @@ public class RulesAndQPManagerClass implements RulesAndQPManager {
                     new RuleOperationResult(RuleOperationResult.RuleOperationStatus.SUCCESS,rule));
         }
         else {
-            qpRepository.save(qp);
             return new QPAndRuleOperationResult(QPAndRuleOperationResult.QPAndRuleOperationStatus.RULE_NOT_IN_QP,
                     new QPOperationResult(QPOperationResult.QPOperationStatus.SUCCESS, qp),
                     new RuleOperationResult(RuleOperationResult.RuleOperationStatus.SUCCESS, rule));
