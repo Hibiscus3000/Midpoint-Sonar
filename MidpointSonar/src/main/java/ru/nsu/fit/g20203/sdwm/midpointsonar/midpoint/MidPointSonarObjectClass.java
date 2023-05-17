@@ -14,7 +14,6 @@ public class MidPointSonarObjectClass implements MidPointSonarObject {
     }
     public Set<String> showAllKeys(){
         Set<String> setOfKeys = values.keySet();
-        System.out.println(setOfKeys);
         return setOfKeys;
     }
     public HashMap<String,String> getValues(){
