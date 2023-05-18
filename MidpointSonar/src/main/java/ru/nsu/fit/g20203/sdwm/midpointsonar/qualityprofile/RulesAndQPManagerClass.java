@@ -2,6 +2,8 @@ package ru.nsu.fit.g20203.sdwm.midpointsonar.qualityprofile;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.repositories.QPRepository;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.repositories.RuleRepository;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.QPAndRuleOperationResult;
@@ -15,6 +17,7 @@ import static ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.RuleOperationResu
 
 
 @Service
+@RequestMapping("/RAndQPManger")
 public class RulesAndQPManagerClass implements RulesAndQPManager {
     private final QPRepository qpRepository;
     private final RuleRepository ruleRepository;
@@ -26,6 +29,7 @@ public class RulesAndQPManagerClass implements RulesAndQPManager {
     }
 
     @Override
+    @GetMapping("/CreateQP")
     public QPOperationResult createNewQualityProfile(String profileName) {
         QualityProfile oldQ = qpRepository.findByName(profileName);
         if (oldQ != null) {
@@ -37,6 +41,7 @@ public class RulesAndQPManagerClass implements RulesAndQPManager {
     }
 
     @Override
+    @GetMapping("/RenameQP")
     public QPOperationResult renameQualityProfile(String oldName, String newName) {
         QualityProfile qp = qpRepository.findByName(oldName);
         if (qp == null){
@@ -53,6 +58,7 @@ public class RulesAndQPManagerClass implements RulesAndQPManager {
 
 
     @Override
+    @GetMapping("/RemoveQP")
     public QPOperationResult removeQualityProfile(String profileName) {
         QualityProfile qp = qpRepository.findByName(profileName);
         if (qp == null){
@@ -63,6 +69,7 @@ public class RulesAndQPManagerClass implements RulesAndQPManager {
     }
 
     @Override
+    @GetMapping("/AddRuleToQP")
     public QPAndRuleOperationResult addRuleToQualityProfile(String ruleName, String profileName) {
         QualityProfile qp =  qpRepository.findByName(profileName);
         if (qp == null){
@@ -86,7 +93,6 @@ public class RulesAndQPManagerClass implements RulesAndQPManager {
                     new RuleOperationResult(RuleOperationResult.RuleOperationStatus.SUCCESS,rule));
         }
         else {
-            qpRepository.save(qp);
             return new QPAndRuleOperationResult(QPAndRuleOperationResult.QPAndRuleOperationStatus.RULE_ALREADY_IN_QP,
                     new QPOperationResult(QPOperationResult.QPOperationStatus.SUCCESS, qp),
                     new RuleOperationResult(RuleOperationResult.RuleOperationStatus.SUCCESS, rule));
@@ -95,6 +101,7 @@ public class RulesAndQPManagerClass implements RulesAndQPManager {
     }
 
     @Override
+    @GetMapping("/RemoveRuleFromQP")
     public QPAndRuleOperationResult removeRuleFromQualityProfile(String ruleName, String profileName) {
         QualityProfile qp =  qpRepository.findByName(profileName);
         if (qp == null) {
@@ -118,7 +125,6 @@ public class RulesAndQPManagerClass implements RulesAndQPManager {
                     new RuleOperationResult(RuleOperationResult.RuleOperationStatus.SUCCESS,rule));
         }
         else {
-            qpRepository.save(qp);
             return new QPAndRuleOperationResult(QPAndRuleOperationResult.QPAndRuleOperationStatus.RULE_NOT_IN_QP,
                     new QPOperationResult(QPOperationResult.QPOperationStatus.SUCCESS, qp),
                     new RuleOperationResult(RuleOperationResult.RuleOperationStatus.SUCCESS, rule));
@@ -127,21 +133,25 @@ public class RulesAndQPManagerClass implements RulesAndQPManager {
     }
 
     @Override
+    @GetMapping("/GetQP")
     public QualityProfile getQualityProfile(String profileName) {
         return qpRepository.findByName(profileName);
     }
 
     @Override
+    @GetMapping("/GetAllQP")
     public Collection<QualityProfile> getAllQualityProfiles() {
         return qpRepository.findAll();
     }
 
     @Override
+    @GetMapping("/GetRule")
     public Rule getRule(String ruleName) {
         return ruleRepository.findByName(ruleName);
     }
 
     @Override
+    @GetMapping("/GetAllRule")
     public Collection<Rule> getAllRules() {
         return ruleRepository.findAll();
     }
