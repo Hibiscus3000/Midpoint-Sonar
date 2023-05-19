@@ -2,8 +2,15 @@ server:
   port: 15000
 
 spring:
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+
   datasource:
-    url: jdbc:mysql://root:Pf189Asstye8BRqLcxmQ@containers-us-west-35.railway.app:6033/railway
-    username: root
-    password: Pf189Asstye8BRqLcxmQ
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${POSTGRES_URL:jdbc:postgresql://localhost:15001/postgres}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+
