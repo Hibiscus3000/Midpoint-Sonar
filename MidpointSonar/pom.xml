@@ -35,6 +35,10 @@
         <maven.compiler.target>19</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+        <sonar.organization>hibiscus3000</sonar.organization>
+        <sonar.projectKey>Hibiscus3000_Midpoint-Sonar</sonar.projectKey>
+        <sonar.login>${SONAR_TOKEN_CMD}</sonar.login>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 
         <midpoint.version>4.7</midpoint.version>
         <junit.version>5.6.0</junit.version>
@@ -139,6 +143,18 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>1.5.5.Final</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>1.5.5.Final</version>
         </dependency>
 
     </dependencies>

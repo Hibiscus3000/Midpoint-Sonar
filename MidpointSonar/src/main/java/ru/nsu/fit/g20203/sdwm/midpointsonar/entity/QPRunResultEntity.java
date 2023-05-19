@@ -9,7 +9,7 @@ import java.util.List;
 @Table(name = "qp_run_result")
 @Entity
 @Data
-public class QPRunResult {
+public class QPRunResultEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "qp_run_result")

@@ -4,20 +4,19 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-@Table(name = "rule_operation_result")
+@Table(name = "rule_load_result")
 @Entity
 @Data
-public class RuleOperationResult {
+public class RuleLoadResultEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "rule_op_result")
-    Integer RuleOpResult;
+    @Column(name = "rule_load_result_id")
+    Integer ruleLoadResult;
 
-    @Basic
     @Column(name = "status")
     String status;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "rule_id")
-    RuleEntity ruleEntity;
+    RuleEntity rule;
 }

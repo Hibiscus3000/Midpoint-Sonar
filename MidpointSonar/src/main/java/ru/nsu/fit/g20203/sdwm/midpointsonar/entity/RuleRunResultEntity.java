@@ -14,16 +14,13 @@ public class RuleRunResultEntity {
     Integer ruleRunResultId;
 
     @OneToOne
-    @JoinColumn(name = "rule_op_result_id")
-    RuleRunResultEntity ruleRunResultEntity;
-
-    @Column(name = "rule_load_result")
-    String ruleLoadResult;
+    @JoinColumn(name = "rule_load_result")
+    RuleLoadResultEntity ruleLoadResultEntity;
 
     @Column(name = "status")
     String status;
     
     
     @ManyToOne
-    QPRunResult qpRunResult;
+    QPRunResultEntity qpRunResult;
 }
