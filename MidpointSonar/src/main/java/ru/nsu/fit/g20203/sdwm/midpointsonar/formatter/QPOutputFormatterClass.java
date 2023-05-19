@@ -1,5 +1,6 @@
 package ru.nsu.fit.g20203.sdwm.midpointsonar.formatter;
 
+import org.springframework.stereotype.Component;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.midpoint.ServerTask;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.qualityprofile.QualityProfile;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.qualityprofile.Rule;
@@ -15,6 +16,7 @@ import static ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.QPOperationResult
 import static ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.QPOperationResult.QPOperationStatus.QP_WITH_GIVEN_NAME_ALREADY_EXISTS;
 import static ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.RuleOperationResult.RuleOperationStatus.NO_SUCH_RULE;
 
+@Component
 public class QPOutputFormatterClass implements QPOutputFormatter{
     public String lsQP(QualityProfile qualityProfile) {
         StringBuilder formattedQp = new StringBuilder();

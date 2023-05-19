@@ -6,9 +6,9 @@ import ru.nsu.fit.g20203.sdwm.midpointsonar.result.async.RuleLoadResult;
 
 public interface RunHistory {
 
-    QPRunResult getQPRunResult(Long runId);
+    QPRunResult getQPRunResult(Integer runId);
 
-    RuleLoadResult getLoadResult(Long loadId);
+    RuleLoadResult getLoadResult(Integer loadId);
 
     Iterable<QPRunResult> getRunHistory();
 

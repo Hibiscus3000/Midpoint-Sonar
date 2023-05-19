@@ -1,5 +1,6 @@
 package ru.nsu.fit.g20203.sdwm.midpointsonar.formatter;
 
+import org.springframework.stereotype.Component;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.midpoint.MidPointSonarObject;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.midpoint.MidPointSonarObjectClass;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.result.Status;
@@ -14,6 +15,7 @@ import static ru.nsu.fit.g20203.sdwm.midpointsonar.result.async.RuleLoadResult.R
 import static ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.QPOperationResult.QPOperationStatus.NO_SUCH_QUALITY_PROFILE;
 import static ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.RuleOperationResult.RuleOperationStatus.NO_SUCH_RULE;
 import static ru.nsu.fit.g20203.sdwm.midpointsonar.result.Status.SUCCESS;
+
 
 public class TaskRunResultFormatterClass implements TaskRunResultFormatter {
     public String formatRuleLoadResult(RuleLoadResult ruleLoadResult) {
