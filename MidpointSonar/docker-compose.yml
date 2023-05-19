@@ -2,11 +2,13 @@ version: "3.9"
 
 services:
   midpoint_sonar:
-    build: ./
+    build: .
     ports:
       - "15000:15000"
 
   postgres:
     image: postgres
+    environment:
+      - POSTGRES_PASSWORD=postgres
     ports:
-      - "5432:15001"
+      - "15001:5432"
