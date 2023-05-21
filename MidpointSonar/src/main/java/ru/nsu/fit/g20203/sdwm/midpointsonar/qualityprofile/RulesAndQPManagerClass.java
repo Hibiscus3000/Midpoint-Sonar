@@ -22,7 +22,6 @@ import static ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.RuleOperationResu
 
 
 @Service
-@RequestMapping("/RAndQPManger")
 public class RulesAndQPManagerClass implements RulesAndQPManager {
     private final QPRepository qpRepository;
     private final RuleRepository ruleRepository;
@@ -40,7 +39,6 @@ public class RulesAndQPManagerClass implements RulesAndQPManager {
     }
 
     @Override
-    @GetMapping("/CreateQP")
     public QPOperationResult createNewQualityProfile(String profileName) {
         var oldQ = qpRepository.findByName(profileName);
         if (oldQ.isPresent()) {
@@ -52,7 +50,6 @@ public class RulesAndQPManagerClass implements RulesAndQPManager {
     }
 
     @Override
-    @GetMapping("/RenameQP")
     public QPOperationResult renameQualityProfile(String oldName, String newName) {
         var qp = qpRepository.findByName(oldName);
         if (qp.isEmpty()){
@@ -70,7 +67,6 @@ public class RulesAndQPManagerClass implements RulesAndQPManager {
 
 
     @Override
-    @GetMapping("/RemoveQP")
     public QPOperationResult removeQualityProfile(String profileName) {
         var qp = qpRepository.findByName(profileName);
         if (qp.isEmpty()){
@@ -81,7 +77,6 @@ public class RulesAndQPManagerClass implements RulesAndQPManager {
     }
 
     @Override
-    @GetMapping("/AddRuleToQP")
     public QPAndRuleOperationResult addRuleToQualityProfile(String ruleName, String profileName) {
         var qp =  qpRepository.findByName(profileName);
         if (qp.isEmpty()){
@@ -115,7 +110,6 @@ public class RulesAndQPManagerClass implements RulesAndQPManager {
     }
 
     @Override
-    @GetMapping("/RemoveRuleFromQP")
     public QPAndRuleOperationResult removeRuleFromQualityProfile(String ruleName, String profileName) {
         var qp =  qpRepository.findByName(profileName);
         if (qp.isEmpty()) {
@@ -148,14 +142,12 @@ public class RulesAndQPManagerClass implements RulesAndQPManager {
     }
 
     @Override
-    @GetMapping("/GetQP")
     public QualityProfile getQualityProfile(String profileName) {
         var entity = qpRepository.findByName(profileName);
         return entity.map(qualityProfileMapper::map).orElse(null);
     }
 
     @Override
-    @GetMapping("/GetAllQP")
     public Collection<QualityProfile> getAllQualityProfiles() {
         List<QualityProfileEntity> qualityProfileEntityList = qpRepository.findAll();
         List<QualityProfile> qualityProfiles = new ArrayList<>();
@@ -166,14 +158,12 @@ public class RulesAndQPManagerClass implements RulesAndQPManager {
     }
 
     @Override
-    @GetMapping("/GetRule")
     public Rule getRule(String ruleName) {
         var ruleEntity = ruleRepository.findByName(ruleName);
         return ruleMapper.map(ruleEntity.get());
     }
 
     @Override
-    @GetMapping("/GetAllRule")
     public Collection<Rule> getAllRules() {
         var entityList = ruleRepository.findAll();
         List<Rule> rules = new ArrayList<>();
