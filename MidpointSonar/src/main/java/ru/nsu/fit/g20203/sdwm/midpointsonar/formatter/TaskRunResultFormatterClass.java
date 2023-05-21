@@ -2,21 +2,20 @@ package ru.nsu.fit.g20203.sdwm.midpointsonar.formatter;
 
 import org.springframework.stereotype.Component;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.midpoint.MidPointSonarObject;
-import ru.nsu.fit.g20203.sdwm.midpointsonar.midpoint.MidPointSonarObjectClass;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.result.Status;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.result.async.QPRunResult;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.result.async.RuleLoadResult;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.result.async.RuleRunResult;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-import static ru.nsu.fit.g20203.sdwm.midpointsonar.result.async.RuleLoadResult.RuleLoadStatus.*;
 import static ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.QPOperationResult.QPOperationStatus.NO_SUCH_QUALITY_PROFILE;
 import static ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.RuleOperationResult.RuleOperationStatus.NO_SUCH_RULE;
 import static ru.nsu.fit.g20203.sdwm.midpointsonar.result.Status.SUCCESS;
 
-
+@Component
 public class TaskRunResultFormatterClass implements TaskRunResultFormatter {
     public String formatRuleLoadResult(RuleLoadResult ruleLoadResult) {
         StringBuilder formattedRuleLoadResult = new StringBuilder();
@@ -55,7 +54,16 @@ public class TaskRunResultFormatterClass implements TaskRunResultFormatter {
         }
 
         return formattedRuleLoadResult.toString();
-    };
+    }
+
+    @Override
+    public String formatRuleLoadHistory(Collection<RuleLoadResult> ruleLoadResults) {
+        StringBuilder ruleLoadHistoryBuilder = new StringBuilder("Load history:\n");
+        for (RuleLoadResult ruleLoadResult : ruleLoadResults) {
+            ruleLoadHistoryBuilder.append(formatRuleLoadResult(ruleLoadResult));
+        }
+        return ruleLoadHistoryBuilder.toString();
+    }
 
     public String formatRuleRunResult(RuleRunResult ruleRunResult){
         StringBuilder formattedRuleRunResult = new StringBuilder();
@@ -108,7 +116,16 @@ public class TaskRunResultFormatterClass implements TaskRunResultFormatter {
         }
 
         return formattedQPRunResult.toString();
-    };
+    }
+
+    @Override
+    public String formatRunHistory(Collection<QPRunResult> qpRunResults) {
+        StringBuilder runHistoryBuilder = new StringBuilder("Run history:\n");
+        for (QPRunResult qpRunResult : qpRunResults) {
+            runHistoryBuilder.append(formatQPRunResult(qpRunResult));
+        }
+        return runHistoryBuilder.toString();
+    }
 
     public String formatMidPointSonarObject (MidPointSonarObject midPointSonarObject) {
         StringBuilder formattedMidPointSonarObject = new StringBuilder();

@@ -19,17 +19,24 @@ import static ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.RuleOperationResu
 @Component
 public class QPOutputFormatterClass implements QPOutputFormatter{
     public String lsQP(QualityProfile qualityProfile) {
-        StringBuilder formattedQp = new StringBuilder();
-        String name = qualityProfile.getName();
-        formattedQp.append("Quality profile with name " + name + " contains:\n");
-        for (Rule rule: qualityProfile.getAllRules()) {
-            formattedQp.append(formatRule(rule));
+        if (null != qualityProfile) {
+            StringBuilder formattedQp = new StringBuilder();
+            String name = qualityProfile.getName();
+            formattedQp.append("Quality profile with name ").append(name).append(" contains:\n");
+            for (Rule rule : qualityProfile.getAllRules()) {
+                formattedQp.append(formatRule(rule));
+            }
+            return formattedQp.toString();
+        } else {
+            return "No quality profile with given name exists\n";
         }
-        return formattedQp.toString();
     }
 
     public String lsQPs(Collection<QualityProfile> qualityProfiles) {
-        StringBuilder formattedQps = new StringBuilder();
+        if (qualityProfiles.isEmpty()) {
+            return "No quality profile has been created yet\n";
+        }
+        StringBuilder formattedQps = new StringBuilder("All quality profiles:\n");
         for (QualityProfile qualityProfile: qualityProfiles) {
             formattedQps.append(lsQP(qualityProfile));
         }
@@ -74,7 +81,7 @@ public class QPOutputFormatterClass implements QPOutputFormatter{
         return formattedRuleOperationResult.toString();
     }
 
-    public String formatQpAndRuleOpResult(QPAndRuleOperationResult qpAndRuleOperationResult) {
+    public String formatQPAndRuleOpResult(QPAndRuleOperationResult qpAndRuleOperationResult) {
         StringBuilder formattedQpAndRuleOpResult = new StringBuilder();
         switch (qpAndRuleOperationResult.getStatus()) {
             case RULE_ALREADY_IN_QP:

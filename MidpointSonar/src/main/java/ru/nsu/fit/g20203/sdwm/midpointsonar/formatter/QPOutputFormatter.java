@@ -20,5 +20,5 @@ public interface QPOutputFormatter {
 
     String formatRuleOperationResult(RuleOperationResult ruleOperationResult);
 
-    String formatQpAndRuleOpResult(QPAndRuleOperationResult qpAndRuleOperationResult);
+    String formatQPAndRuleOpResult(QPAndRuleOperationResult qpAndRuleOperationResult);
 }

@@ -1,7 +1,6 @@
 package ru.nsu.fit.g20203.sdwm.midpointsonar.formatter;
 
 import org.junit.jupiter.api.Test;
-import ru.nsu.fit.g20203.sdwm.midpointsonar.midpoint.ServerTask;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.qualityprofile.QualityProfile;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.qualityprofile.Rule;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.QPAndRuleOperationResult;
@@ -12,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.QPAndRuleOperationResult.QPAndRuleOperationStatus.RULE_NOT_IN_QP;
 import static ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.QPOperationResult.QPOperationStatus.NO_SUCH_QUALITY_PROFILE;
 import static ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.QPOperationResult.QPOperationStatus.SUCCESS;
@@ -40,8 +38,11 @@ class QPOutputFormatterClassTest {
         Rule rule = new Rule("Rule");
         qualityProfile1.addRule(rule);
         qualityProfile2.addRule(rule);
-        List<QualityProfile> qps = new ArrayList<>() {{add(qualityProfile1); add(qualityProfile2);}};
-        String expected = "Quality profile with name Name1 contains:\n" +
+        List<QualityProfile> qps = new ArrayList<>() {{
+            add(qualityProfile1);
+            add(qualityProfile2);
+        }};
+        String expected = "All quality profiles:\nQuality profile with name Name1 contains:\n" +
                 "Rule with name " + rule.getName() + " with server task null\n" +
                 "Quality profile with name Name2 contains:\n" +
                 "Rule with name " + rule.getName() + " with server task null\n";
@@ -112,7 +113,7 @@ class QPOutputFormatterClassTest {
 
         String expected = "Rule with name Name with server task null\n" +
                 "not in Quality profile with name null\n";
-        String actual = qpOutputFormatter.formatQpAndRuleOpResult(qpAndRuleOperationResult);
+        String actual = qpOutputFormatter.formatQPAndRuleOpResult(qpAndRuleOperationResult);
 
         assertEquals(actual, expected);
     }
