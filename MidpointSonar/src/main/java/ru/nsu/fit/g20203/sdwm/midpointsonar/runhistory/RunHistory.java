@@ -1,7 +1,9 @@
-package ru.nsu.fit.g20203.sdwm.midpointsonar;
+package ru.nsu.fit.g20203.sdwm.midpointsonar.runhistory;
 
 import ru.nsu.fit.g20203.sdwm.midpointsonar.result.async.QPRunResult;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.result.async.RuleLoadResult;
+
+import java.util.Collection;
 
 
 public interface RunHistory {
@@ -10,7 +12,7 @@ public interface RunHistory {
 
     RuleLoadResult getLoadResult(Integer loadId);
 
-    Iterable<QPRunResult> getRunHistory();
+    Collection<QPRunResult> getRunHistory();
 
-    Iterable<RuleLoadResult> getLoadHistory();
+    Collection<RuleLoadResult> getLoadHistory();
 }
