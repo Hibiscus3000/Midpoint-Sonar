@@ -1,7 +1,6 @@
 package ru.nsu.fit.g20203.sdwm.midpointsonar.formatter;
 
 import org.junit.jupiter.api.Test;
-import ru.nsu.fit.g20203.sdwm.midpointsonar.midpoint.ServerTask;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.qualityprofile.QualityProfile;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.qualityprofile.Rule;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.QPAndRuleOperationResult;
@@ -112,7 +111,7 @@ class QPOutputFormatterClassTest {
 
         String expected = "Rule with name Name with server task null\n" +
                 "not in Quality profile with name null\n";
-        String actual = qpOutputFormatter.formatQpAndRuleOpResult(qpAndRuleOperationResult);
+        String actual = qpOutputFormatter.formatQPAndRuleOpResult(qpAndRuleOperationResult);
 
         assertEquals(actual, expected);
     }
