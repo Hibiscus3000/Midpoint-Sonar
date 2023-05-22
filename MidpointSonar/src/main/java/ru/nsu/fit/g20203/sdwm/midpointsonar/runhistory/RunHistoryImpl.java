@@ -31,7 +31,6 @@ public class RunHistoryImpl implements RunHistory {
     @Override
     public RuleLoadResult getLoadResult(Integer loadId) {
         Optional<RuleLoadResultEntity> result = ruleLoadResultRepo.findById(loadId);
-
         return result.map(ruleLoadResultMapper::map).orElse(null);
     }
 
