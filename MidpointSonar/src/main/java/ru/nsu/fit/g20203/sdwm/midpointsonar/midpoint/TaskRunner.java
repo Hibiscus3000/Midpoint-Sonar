@@ -13,22 +13,9 @@ import java.io.FileNotFoundException;
 
 public class TaskRunner {
 
-
-    public void run(String oid){
-
-        RestPrismService restPrismService = null;
-        try {
-            restPrismService = RestPrismServiceBuilder.create()
-                    .baseUrl("http://localhost:8080/midpoint/ws/rest")
-                    .username("administrator")
-                    .password("5ecr3t")
-                    .build();
-        } catch (FileNotFoundException | SchemaException e) {
-            throw new RuntimeException(e);
-        }
+    public void run(RestPrismService restPrismService, String oid){
         RestPrismTaskService taskService = new RestPrismTaskService(restPrismService,
                 oid);
-
         try {
             ObjectReference<TaskType> task = taskService.run().post();
             System.out.println(task.toString());
@@ -36,6 +23,4 @@ public class TaskRunner {
             throw new RuntimeException(e);
         }
     }
-
-    
 }
