@@ -18,4 +18,7 @@ public class QPRunResultEntity {
     @OneToMany
     @JoinColumn(name = "qp_run_result_id")
     List<RuleRunResultEntity> ruleRunResultEntityList;
+
+    @OneToOne
+    QPOperationResultEntity qpOperationResultEntity;
 }
