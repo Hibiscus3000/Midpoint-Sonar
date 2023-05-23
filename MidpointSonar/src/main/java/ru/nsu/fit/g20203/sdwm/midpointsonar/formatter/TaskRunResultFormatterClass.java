@@ -21,17 +21,11 @@ public class TaskRunResultFormatterClass implements TaskRunResultFormatter {
         StringBuilder formattedRuleLoadResult = new StringBuilder();
 
         if (!ruleLoadResult.getRuleLoadStatus().isDone()) {
-            formattedRuleLoadResult.append("Rule with name " +
-                    ruleLoadResult.getRuleOperationResult().getRule().getName() +
-                    "hasn't loaded yet.\n");
+            formattedRuleLoadResult.append("Rule with name ").append(ruleLoadResult.getRuleOperationResult().getRule().getName()).append("hasn't loaded yet.\n");
         } else if (ruleLoadResult.getRuleOperationResult().getStatus() == NO_SUCH_RULE) {
-            formattedRuleLoadResult.append("There is no rule with name " +
-                                            ruleLoadResult.getRuleOperationResult().getRule().getName() + ".\n");
+            formattedRuleLoadResult.append("There is no rule with name ").append(ruleLoadResult.getRuleOperationResult().getRule().getName()).append(".\n");
         } else {
-            formattedRuleLoadResult.append("Rule named "
-                                            + ruleLoadResult.getRuleOperationResult().getRule().getName() +
-                                            " with server task " +
-                                            ruleLoadResult.getRuleOperationResult().getRule().getServerTask());
+            formattedRuleLoadResult.append("Rule named ").append(ruleLoadResult.getRuleOperationResult().getRule().getName()).append(" with server task ").append(ruleLoadResult.getRuleOperationResult().getRule().getServerTask());
 
             RuleLoadResult.RuleLoadStatus ruleLoadStatus = null;
             try {
@@ -73,10 +67,7 @@ public class TaskRunResultFormatterClass implements TaskRunResultFormatter {
         if (ruleRunResult.getRuleOperationResult().getStatus() == NO_SUCH_RULE) {
             formattedRuleRunResult.append("Cannot be run.\n");
         } else {
-            formattedRuleRunResult.append("Rule named "
-                    + ruleRunResult.getRuleOperationResult().getRule().getName() +
-                    " with server task " +
-                    ruleRunResult.getRuleOperationResult().getRule().getServerTask());
+            formattedRuleRunResult.append("Rule named ").append(ruleRunResult.getRuleOperationResult().getRule().getName()).append(" with server task ").append(ruleRunResult.getRuleOperationResult().getRule().getServerTask());
 
             Status ruleRunStatus = null;
             try {
@@ -123,6 +114,22 @@ public class TaskRunResultFormatterClass implements TaskRunResultFormatter {
         StringBuilder runHistoryBuilder = new StringBuilder("Run history:\n");
         for (QPRunResult qpRunResult : qpRunResults) {
             runHistoryBuilder.append(formatQPRunResult(qpRunResult));
+        }
+        return runHistoryBuilder.toString();
+    }
+
+    public String formatRuleLoadHistoryWId(Map<Integer, RuleLoadResult> ruleLoadResultMap) {
+        StringBuilder ruleLoadHistoryBuilder = new StringBuilder("Load history:\n");
+        for (Map.Entry<Integer, RuleLoadResult> e : ruleLoadResultMap.entrySet()) {
+            ruleLoadHistoryBuilder.append(e.getKey()).append(": ").append(formatRuleLoadResult(e.getValue()));
+        }
+        return ruleLoadHistoryBuilder.toString();
+    }
+
+    public String formatRunHistoryWId(Map<Integer, QPRunResult> qpRunResultMap) {
+        StringBuilder runHistoryBuilder = new StringBuilder("Run history:\n");
+        for (Map.Entry<Integer, QPRunResult> e : qpRunResultMap.entrySet()) {
+            runHistoryBuilder.append(e.getKey()).append(": ").append(formatQPRunResult(e.getValue()));
         }
         return runHistoryBuilder.toString();
     }
