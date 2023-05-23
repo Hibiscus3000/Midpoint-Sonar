@@ -11,16 +11,16 @@ public class RuleRunResultEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column
-    Integer ruleRunResultId;
+    private Integer id;
 
     @OneToOne
     @JoinColumn(name = "rule_load_result")
-    RuleLoadResultEntity ruleLoadResultEntity;
+    private RuleLoadResultEntity ruleLoadResultEntity;
 
     @Column(name = "status")
-    String status;
-    
-    
+    private String status;
+
+
     @ManyToOne
-    QPRunResultEntity qpRunResult;
+    private QPRunResultEntity qpRunResult;
 }

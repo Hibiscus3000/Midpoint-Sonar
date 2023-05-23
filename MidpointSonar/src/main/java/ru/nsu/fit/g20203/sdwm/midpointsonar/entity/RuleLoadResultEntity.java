@@ -11,12 +11,12 @@ public class RuleLoadResultEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "rule_load_result_id")
-    Integer ruleLoadResult;
+    private Integer id;
 
     @Column(name = "status")
-    String status;
+    private String status;
 
     @OneToOne
     @JoinColumn(name = "rule_id")
-    RuleEntity rule;
+    private RuleEntity rule;
 }

@@ -2,7 +2,6 @@ package ru.nsu.fit.g20203.sdwm.midpointsonar.runhistory;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.nsu.fit.g20203.sdwm.midpointsonar.runhistory.RunHistory;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.entity.QPRunResultEntity;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.entity.RuleLoadResultEntity;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.mapper.QPRunResultMapper;
@@ -12,10 +11,8 @@ import ru.nsu.fit.g20203.sdwm.midpointsonar.repositories.RuleLoadResultRepo;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.result.async.QPRunResult;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.result.async.RuleLoadResult;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -56,5 +53,37 @@ public class RunHistoryImpl implements RunHistory {
             results.add(ruleLoadResultMapper.map(it));
         }
         return results;
+    }
+
+    @Override
+    public Map<Integer, QPRunResult> getRunHistory1() {
+        return qpRunResultRepo.findAll().stream().collect(Collectors.toMap(qpRunResultEntity -> qpRunResultEntity.getId(),
+                qpRunResultEntity -> qpRunResultMapper.map(qpRunResultEntity)));
+    }
+
+    @Override
+    public Map<Integer, RuleLoadResult> getLoadHistory1() {
+        return ruleLoadResultRepo.findAll().stream().collect(Collectors.toMap(ruleLoadResultEntity -> ruleLoadResultEntity.getId(),
+                ruleLoadResultEntity -> ruleLoadResultMapper.map(ruleLoadResultEntity)));
+    }
+
+    @Override
+    public QPRunResultEntity saveQpRunResult(QPRunResult qpRunResult) {
+        return qpRunResultRepo.save(qpRunResultMapper.map(qpRunResult));
+    }
+
+    @Override
+    public RuleLoadResultEntity saveRuleLoadResult(RuleLoadResult result) {
+        return ruleLoadResultRepo.save(ruleLoadResultMapper.map(result));
+    }
+
+    @Override
+    public void clearRunHistory() {
+        qpRunResultRepo.deleteAll();
+    }
+
+    @Override
+    public void clearLoadHistory() {
+        ruleLoadResultRepo.deleteAll();
     }
 }
