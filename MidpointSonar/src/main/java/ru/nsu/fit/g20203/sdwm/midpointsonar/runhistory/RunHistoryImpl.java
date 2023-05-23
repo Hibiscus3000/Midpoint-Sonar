@@ -57,4 +57,10 @@ public class RunHistoryImpl implements RunHistory {
         }
         return results;
     }
+
+    @Override
+    public void deleteAll(){
+        qpRunResultRepo.deleteAll();
+        ruleLoadResultRepo.deleteAll();
+    };
 }

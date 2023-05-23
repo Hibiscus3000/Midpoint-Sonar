@@ -15,4 +15,6 @@ public interface RunHistory {
     Collection<QPRunResult> getRunHistory();
 
     Collection<RuleLoadResult> getLoadHistory();
+
+    void deleteAll();
 }
