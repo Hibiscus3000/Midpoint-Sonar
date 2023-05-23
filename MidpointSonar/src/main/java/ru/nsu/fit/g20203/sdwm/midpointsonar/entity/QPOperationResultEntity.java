@@ -11,12 +11,12 @@ public class QPOperationResultEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "qp_op_result_id")
-    Integer QPOpResultId;
+    private Integer id;
 
     @Column(name = "status")
-    String status;
+    private String status;
 
     @ManyToOne
     @JoinColumn(name = "qp_id")
-    QualityProfileEntity qualityProfileEntity;
+    private QualityProfileEntity qualityProfileEntity;
 }

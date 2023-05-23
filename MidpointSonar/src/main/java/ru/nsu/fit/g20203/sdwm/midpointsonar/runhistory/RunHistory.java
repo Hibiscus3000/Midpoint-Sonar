@@ -19,10 +19,15 @@ public interface RunHistory {
 
     Collection<RuleLoadResult> getLoadHistory();
 
-    Map<Integer, QPRunResult> getQpRunResultMap();
+    Map<Integer, QPRunResult> getRunHistory1();
+
+    Map<Integer, RuleLoadResult> getLoadHistory1();
 
     QPRunResultEntity saveQpRunResult(QPRunResult qpRunResult);
 
     RuleLoadResultEntity saveRuleLoadResult(RuleLoadResult result);
-    void deleteAll();
+
+    void clearRunHistory();
+
+    void clearLoadHistory();
 }

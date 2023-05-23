@@ -12,11 +12,11 @@ public class QualityProfileEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "qp_id")
-    Integer qpId;
+    private Integer id;
 
     @Basic
     @Column(name = "qp_name")
-    String name;
+    private String name;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<RuleEntity> rules;

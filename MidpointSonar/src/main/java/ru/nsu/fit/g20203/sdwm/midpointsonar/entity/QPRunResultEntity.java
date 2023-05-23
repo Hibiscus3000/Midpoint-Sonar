@@ -13,12 +13,12 @@ public class QPRunResultEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "qp_run_result")
-    Integer qpRunResult;
+    private Integer id;
 
     @OneToMany
     @JoinColumn(name = "qp_run_result_id")
-    List<RuleRunResultEntity> ruleRunResultEntityList;
+    private List<RuleRunResultEntity> ruleRunResultEntityList;
 
     @OneToOne
-    QPOperationResultEntity qpOperationResultEntity;
+    private QPOperationResultEntity qpOperationResultEntity;
 }

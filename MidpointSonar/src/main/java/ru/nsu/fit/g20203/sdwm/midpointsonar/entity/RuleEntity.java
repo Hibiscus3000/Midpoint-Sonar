@@ -13,13 +13,13 @@ public class RuleEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "rule_id")
-    Integer RuleId;
+    private Integer id;
 
     @Basic
     @Column(name = "name")
-    String name;
+    private String name;
 
     @Basic
     @Column(name = "task_oid")
-    String task_oid;
+    private String task_oid;
 }
