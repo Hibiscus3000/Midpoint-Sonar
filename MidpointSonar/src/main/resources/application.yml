@@ -9,8 +9,8 @@ spring:
     show-sql: false
 
   datasource:
-    url: jdbc:postgresql://dpg-chjikvqk728k56jrms30-a.frankfurt-postgres.render.com/dbsonar?user=dbsonar_user&password=S7LBXV9QsASiD1N5p1lLekoUgSpYpMgv
-    username: dbsonar_user
-    password: S7LBXV9QsASiD1N5p1lLekoUgSpYpMgv
+    url: ${POSTGRES_URL:jdbc:postgresql://localhost:15001/postgres}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
 
