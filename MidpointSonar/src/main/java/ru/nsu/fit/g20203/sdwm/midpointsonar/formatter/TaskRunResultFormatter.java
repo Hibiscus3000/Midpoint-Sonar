@@ -4,6 +4,7 @@ import ru.nsu.fit.g20203.sdwm.midpointsonar.result.async.QPRunResult;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.result.async.RuleLoadResult;
 
 import java.util.Collection;
+import java.util.Map;
 
 public interface TaskRunResultFormatter {
 
@@ -14,4 +15,8 @@ public interface TaskRunResultFormatter {
     String formatQPRunResult(QPRunResult qpRunResult);
 
     String formatRunHistory(Collection<QPRunResult> qpRunResults);
+
+    String formatRuleLoadHistoryWId(Map<Integer, RuleLoadResult> ruleLoadResultMap);
+
+    String formatRunHistoryWId(Map<Integer, QPRunResult> qpRunResultMap);
 }
