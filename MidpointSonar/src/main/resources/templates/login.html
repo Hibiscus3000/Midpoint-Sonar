@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+  <title>Please Log In</title>
+</head>
+<body>
+<div align="center">
+  <h1>Please Enter data</h1>
+
+  <div th:if ="${loginSuccess}" style="color: #006400; font-weight: 900">Success</div>
+  <div th:if ="${loginError}" style="color: red; font-weight: 900">Invalid arguments</div>
+  <form th:action="@{/login}" th:object="${connectionData}" method="post" >
+    <div>
+      <input type="text" size="50" name="URL" th:field="*{URL}"/>
+    </div>
+    <div>
+      <input type="text" size="50" name="login" th:field="*{login}"/>
+    </div>
+    <div>
+      <input type="text" size="50" name="password" th:field="*{password}"/>
+    </div>
+    <input type="submit" value="Log in" />
+  </form>
+</div>
+</body>
+</html>
