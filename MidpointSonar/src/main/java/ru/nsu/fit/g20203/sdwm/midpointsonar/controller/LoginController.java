@@ -37,10 +37,12 @@ class LoginController {
         }
         catch (FileNotFoundException | SchemaException e) {
             e.printStackTrace();
+            model.addAttribute("loginSuccess", false);
             model.addAttribute("loginError", true);
             return "login";
         }
         model.addAttribute("loginSuccess", true);
+        model.addAttribute("loginError", false);
         return "login";
     }
 }
