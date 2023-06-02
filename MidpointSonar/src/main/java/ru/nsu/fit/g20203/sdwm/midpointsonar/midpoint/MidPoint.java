@@ -21,7 +21,7 @@ public class MidPoint {
     private final RequestConfig requestConfig;
 
     private boolean inited;
-    private String uri;
+    private String uri = "http://localhost:8080/midpoint/ws/rest/tasks";
     private String username;
     private String password;
 
