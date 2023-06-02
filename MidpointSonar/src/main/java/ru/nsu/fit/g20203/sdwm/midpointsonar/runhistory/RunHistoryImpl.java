@@ -7,7 +7,7 @@ import ru.nsu.fit.g20203.sdwm.midpointsonar.entity.RuleLoadResultEntity;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.mapper.QPRunResultMapper;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.mapper.RuleLoadResultMapper;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.repositories.QPRunResultRepository;
-import ru.nsu.fit.g20203.sdwm.midpointsonar.repositories.RuleLoadResultRepo;
+import ru.nsu.fit.g20203.sdwm.midpointsonar.repositories.RuleLoadResultRepository;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.result.async.QPRunResult;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.result.async.RuleLoadResult;
 
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class RunHistoryImpl implements RunHistory {
     private final QPRunResultRepository qpRunResultRepo;
     private final QPRunResultMapper qpRunResultMapper;
-    private final RuleLoadResultRepo ruleLoadResultRepo;
+    private final RuleLoadResultRepository ruleLoadResultRepo;
     private final RuleLoadResultMapper ruleLoadResultMapper;
 
     @Override

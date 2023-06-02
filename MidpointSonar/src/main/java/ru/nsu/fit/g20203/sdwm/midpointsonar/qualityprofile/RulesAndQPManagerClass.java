@@ -2,8 +2,6 @@ package ru.nsu.fit.g20203.sdwm.midpointsonar.qualityprofile;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.entity.QualityProfileEntity;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.mapper.QualityProfileMapper;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.mapper.RuleMapper;
@@ -23,20 +21,14 @@ import static ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.RuleOperationResu
 
 @Service
 public class RulesAndQPManagerClass implements RulesAndQPManager {
-    private final QPRepository qpRepository;
-    private final RuleRepository ruleRepository;
-    private final QualityProfileMapper qualityProfileMapper;
-    private final RuleMapper ruleMapper;
     @Autowired
-    public RulesAndQPManagerClass(QPRepository qpRepository,
-                                  RuleRepository ruleRepository,
-                                  QualityProfileMapper qualityProfileMapper,
-                                  RuleMapper ruleMapper){
-        this.qpRepository = qpRepository;
-        this.ruleRepository = ruleRepository;
-        this.qualityProfileMapper = qualityProfileMapper;
-        this.ruleMapper = ruleMapper;
-    }
+    private QPRepository qpRepository;
+    @Autowired
+    private RuleRepository ruleRepository;
+    @Autowired
+    private QualityProfileMapper qualityProfileMapper;
+    @Autowired
+    private RuleMapper ruleMapper;
 
     @Override
     public QPOperationResult createNewQualityProfile(String profileName) {

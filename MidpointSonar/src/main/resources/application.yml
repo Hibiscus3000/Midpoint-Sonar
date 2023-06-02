@@ -3,7 +3,7 @@ server:
 
 spring:
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
     show-sql: false
@@ -13,4 +13,15 @@ spring:
     username: ${POSTGRES_USER:postgres}
     password: ${POSTGRES_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
+
+logging:
+  level:
+    org:
+      springframework:
+        security: TRACE
+
+springdoc:
+  swagger-ui:
+    path:
+      "/"
 
