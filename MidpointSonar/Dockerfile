@@ -1,4 +1,4 @@
-FROM eclipse-temurin:19-jdk-alpine as jar_builder
+    FROM eclipse-temurin:19-jdk-alpine as jar_builder
 WORKDIR /opt/
 RUN apk update && apk upgrade && apk add git && apk add maven \
   && git clone https://github.com/Hibiscus3000/Midpoint-Sonar.git

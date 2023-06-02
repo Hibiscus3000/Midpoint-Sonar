@@ -30,9 +30,11 @@ public class SecurityConfig {
         return authFilter;
     }
 
+    @SuppressWarnings("removal")
     @Bean
     protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         final SecurityFilterChain securityFilterChain = http
+                .csrf().disable()
                 //.addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth ->
                         auth.anyRequest().authenticated())
