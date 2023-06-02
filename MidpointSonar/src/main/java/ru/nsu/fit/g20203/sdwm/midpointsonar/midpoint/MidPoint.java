@@ -29,7 +29,11 @@ public class MidPoint {
         requestConfig = RequestConfig.custom().setCircularRedirectsAllowed(true).build();
     }
 
-    public int init(String uri, String username, String password) throws IOException, URISyntaxException, InterruptedException {
+    public void setURI(String uri) {
+        this.uri = uri;
+    }
+
+    public int attemptAuth(String username, String password) throws IOException, URISyntaxException, InterruptedException {
         try (CloseableHttpClient client = HttpClients.custom()
                 .setDefaultRequestConfig(requestConfig)
                 .setRedirectStrategy(new LaxRedirectStrategy())
@@ -42,11 +46,11 @@ public class MidPoint {
             HttpResponse response = client.execute(request);
             int statusCode = response.getStatusLine().getStatusCode();
 
+            this.username = username;
+            this.password = password;
+
             if (200 == statusCode) {
                 inited = true;
-                this.uri = uri;
-                this.username = username;
-                this.password = password;
             }
 
             return statusCode;

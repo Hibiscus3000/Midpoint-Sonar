@@ -9,21 +9,20 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.midpoint.MidPoint;
 
+import java.util.ArrayList;
+
 @Component
 public class MidpointAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication)
             throws AuthenticationException {
-        final MidPointAuthenticationToken auth = (MidPointAuthenticationToken) authentication;
-
-        final String uri = auth.getURI().toString();
-        final String username = auth.getName();
-        final String password = auth.getCredentials().toString();
+        final String username = authentication.getName();
+        final String password = authentication.getCredentials().toString();
 
         try {
-            if (200 == MidPoint.getInstance().init(uri, username, password)) {
-                return new MidPointAuthenticationToken(uri, username, password);
+            if (200 == MidPoint.getInstance().attemptAuth(username, password)) {
+                return UsernamePasswordAuthenticationToken.authenticated(username, password, new ArrayList<>());
             } else {
                 throw new AuthenticationCredentialsNotFoundException("Wrong credentials");
             }
