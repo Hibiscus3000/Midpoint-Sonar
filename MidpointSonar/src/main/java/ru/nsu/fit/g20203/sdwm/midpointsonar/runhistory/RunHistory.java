@@ -5,7 +5,6 @@ import ru.nsu.fit.g20203.sdwm.midpointsonar.entity.RuleLoadResultEntity;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.result.async.QPRunResult;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.result.async.RuleLoadResult;
 
-import java.util.Collection;
 import java.util.Map;
 
 
@@ -15,13 +14,9 @@ public interface RunHistory {
 
     RuleLoadResult getLoadResult(Integer loadId);
 
-    Collection<QPRunResult> getRunHistory();
+    Map<Integer, QPRunResult> getRunHistory();
 
-    Collection<RuleLoadResult> getLoadHistory();
-
-    Map<Integer, QPRunResult> getRunHistory1();
-
-    Map<Integer, RuleLoadResult> getLoadHistory1();
+    Map<Integer, RuleLoadResult> getLoadHistory();
 
     QPRunResultEntity saveQpRunResult(QPRunResult qpRunResult);
 

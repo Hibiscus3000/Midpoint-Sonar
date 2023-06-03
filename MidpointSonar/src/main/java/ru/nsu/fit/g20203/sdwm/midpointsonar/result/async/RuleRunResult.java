@@ -5,26 +5,30 @@ import ru.nsu.fit.g20203.sdwm.midpointsonar.result.Status;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.RuleOperationResult;
 
 import java.util.Collection;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
-public class RuleRunResult extends AsyncResult {
+public class RuleRunResult {
 
     private RuleOperationResult ruleOperationResult;
-    private final RuleLoadResult ruleLoadResult;
-    private final Future<Status> ruleRunStatus;
-    private final Future<Collection<MidPointSonarObject>> objects;
-
-    public RuleRunResult(Long id, RuleLoadResult ruleLoadResult, Future<Status> ruleRunStatus,
-                         Future<Collection<MidPointSonarObject>> objects) {
-        super(id);
-        this.ruleLoadResult = ruleLoadResult;
-        this.ruleRunStatus = ruleRunStatus;
-        this.objects = objects;
-    }
+    private RuleLoadResult ruleLoadResult;
+    private CompletableFuture<Status> ruleRunStatus;
+    private CompletableFuture<Collection<MidPointSonarObject>> objects;
 
     public void setRuleOperationResult(RuleOperationResult ruleOperationResult) {
         this.ruleOperationResult = ruleOperationResult;
+    }
+
+    public void setRuleLoadResult(RuleLoadResult ruleLoadResult) {
+        this.ruleLoadResult = ruleLoadResult;
+    }
+
+    public void setRuleRunStatus(CompletableFuture<Status> ruleRunStatus) {
+        this.ruleRunStatus = ruleRunStatus;
+    }
+
+    public void setObjects(CompletableFuture<Collection<MidPointSonarObject>> objects) {
+        this.objects = objects;
     }
 
     public RuleOperationResult getRuleOperationResult() {
@@ -39,7 +43,7 @@ public class RuleRunResult extends AsyncResult {
         return ruleRunStatus;
     }
 
-    public Future<Collection<MidPointSonarObject>> getObjects(){
+    public CompletableFuture<Collection<MidPointSonarObject>> getObjects() {
         return objects;
     }
 }

@@ -1,9 +1,9 @@
 package ru.nsu.fit.g20203.sdwm.midpointsonar.entity;
 
 
+import jakarta.persistence.*;
 import lombok.Data;
 
-import javax.persistence.*;
 import java.util.List;
 
 @Table(name = "qp_run_result")

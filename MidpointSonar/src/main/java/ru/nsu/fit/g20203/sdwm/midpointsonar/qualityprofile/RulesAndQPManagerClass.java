@@ -1,9 +1,10 @@
 package ru.nsu.fit.g20203.sdwm.midpointsonar.qualityprofile;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.entity.QualityProfileEntity;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.mapper.QualityProfileMapper;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.mapper.RuleMapper;
@@ -13,9 +14,8 @@ import ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.QPAndRuleOperationResult
 import ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.QPOperationResult;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.RuleOperationResult;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 import static ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.QPOperationResult.QPOperationStatus.NO_SUCH_QUALITY_PROFILE;
 import static ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.RuleOperationResult.RuleOperationStatus.SUCCESS;
@@ -23,20 +23,16 @@ import static ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.RuleOperationResu
 
 @Service
 public class RulesAndQPManagerClass implements RulesAndQPManager {
-    private final QPRepository qpRepository;
-    private final RuleRepository ruleRepository;
-    private final QualityProfileMapper qualityProfileMapper;
-    private final RuleMapper ruleMapper;
     @Autowired
-    public RulesAndQPManagerClass(QPRepository qpRepository,
-                                  RuleRepository ruleRepository,
-                                  QualityProfileMapper qualityProfileMapper,
-                                  RuleMapper ruleMapper){
-        this.qpRepository = qpRepository;
-        this.ruleRepository = ruleRepository;
-        this.qualityProfileMapper = qualityProfileMapper;
-        this.ruleMapper = ruleMapper;
-    }
+    private QPRepository qpRepository;
+    @Autowired
+    private QualityProfileMapper qualityProfileMapper;
+    @Autowired
+    private RuleRepository ruleRepository;
+    @Autowired
+    private RuleMapper ruleMapper;
+
+    private Map<String, Rule> rules;
 
     @Override
     public QPOperationResult createNewQualityProfile(String profileName) {
@@ -52,7 +48,7 @@ public class RulesAndQPManagerClass implements RulesAndQPManager {
     @Override
     public QPOperationResult renameQualityProfile(String oldName, String newName) {
         var qp = qpRepository.findByName(oldName);
-        if (qp.isEmpty()){
+        if (qp.isEmpty()) {
             return new QPOperationResult(NO_SUCH_QUALITY_PROFILE, new QualityProfile(oldName));
         }
         if (qpRepository.existsByName(newName)) {
@@ -65,11 +61,10 @@ public class RulesAndQPManagerClass implements RulesAndQPManager {
         return new QPOperationResult(QPOperationResult.QPOperationStatus.SUCCESS, qualityProfileMapper.map(qp.get()));
     }
 
-
     @Override
     public QPOperationResult removeQualityProfile(String profileName) {
         var qp = qpRepository.findByName(profileName);
-        if (qp.isEmpty()){
+        if (qp.isEmpty()) {
             return new QPOperationResult(NO_SUCH_QUALITY_PROFILE, new QualityProfile(profileName));
         }
         qpRepository.delete(qp.get());
@@ -78,65 +73,62 @@ public class RulesAndQPManagerClass implements RulesAndQPManager {
 
     @Override
     public QPAndRuleOperationResult addRuleToQualityProfile(String ruleName, String profileName) {
-        var qp =  qpRepository.findByName(profileName);
-        if (qp.isEmpty()){
-            return new QPAndRuleOperationResult(QPAndRuleOperationResult.QPAndRuleOperationStatus.SUCCESS,
-                    new QPOperationResult(NO_SUCH_QUALITY_PROFILE, new QualityProfile(profileName)),
-                    new RuleOperationResult(RuleOperationResult.RuleOperationStatus.SUCCESS,
-                            new Rule(ruleName)));
-        }
-        var rule = ruleRepository.findByName(ruleName);
-        QualityProfile qualityProfile = qualityProfileMapper.map(qp.get());
-        if (rule.isEmpty()){
-            return new QPAndRuleOperationResult(QPAndRuleOperationResult.QPAndRuleOperationStatus.SUCCESS,
-                    new QPOperationResult(QPOperationResult.QPOperationStatus.SUCCESS,qualityProfile),
-                    new RuleOperationResult(RuleOperationResult.RuleOperationStatus.NO_SUCH_RULE,
-                            new Rule(ruleName)));
-        }
-
-        RuleOperationResult qpr = qualityProfile.addRule(ruleMapper.map(rule.get()));
-        if (qpr.getStatus() == SUCCESS){
-            qpRepository.save(qualityProfileMapper.map(qualityProfile));
-            return new QPAndRuleOperationResult(QPAndRuleOperationResult.QPAndRuleOperationStatus.SUCCESS,
-                    new QPOperationResult(QPOperationResult.QPOperationStatus.SUCCESS,qualityProfile),
-                    new RuleOperationResult(RuleOperationResult.RuleOperationStatus.SUCCESS,ruleMapper.map(rule.get())));
-        }
-        else {
-            return new QPAndRuleOperationResult(QPAndRuleOperationResult.QPAndRuleOperationStatus.RULE_ALREADY_IN_QP,
-                    new QPOperationResult(QPOperationResult.QPOperationStatus.SUCCESS, qualityProfile),
-                    new RuleOperationResult(RuleOperationResult.RuleOperationStatus.SUCCESS, ruleMapper.map(rule.get())));
-        }
-
-    }
-
-    @Override
-    public QPAndRuleOperationResult removeRuleFromQualityProfile(String ruleName, String profileName) {
-        var qp =  qpRepository.findByName(profileName);
+        var qp = qpRepository.findByName(profileName);
         if (qp.isEmpty()) {
             return new QPAndRuleOperationResult(QPAndRuleOperationResult.QPAndRuleOperationStatus.SUCCESS,
                     new QPOperationResult(NO_SUCH_QUALITY_PROFILE, new QualityProfile(profileName)),
                     new RuleOperationResult(RuleOperationResult.RuleOperationStatus.SUCCESS,
-                            new Rule(ruleName)));
+                            null));
         }
+        Rule rule = rules.get(ruleName);
         QualityProfile qualityProfile = qualityProfileMapper.map(qp.get());
-        var rule = ruleRepository.findByName(ruleName);
-        if (rule.isEmpty()) {
+        if (null == rule) {
             return new QPAndRuleOperationResult(QPAndRuleOperationResult.QPAndRuleOperationStatus.SUCCESS,
                     new QPOperationResult(QPOperationResult.QPOperationStatus.SUCCESS, qualityProfile),
                     new RuleOperationResult(RuleOperationResult.RuleOperationStatus.NO_SUCH_RULE,
-                            new Rule(ruleName)));
+                            null));
         }
-        RuleOperationResult qpr = qualityProfile.removeRule(ruleName);
-        if (qpr.getStatus() == SUCCESS){
+
+        RuleOperationResult qpr = qualityProfile.addRule(rules.get(ruleName));
+        if (qpr.getStatus() == SUCCESS) {
             qpRepository.save(qualityProfileMapper.map(qualityProfile));
             return new QPAndRuleOperationResult(QPAndRuleOperationResult.QPAndRuleOperationStatus.SUCCESS,
-                    new QPOperationResult(QPOperationResult.QPOperationStatus.SUCCESS,qualityProfile),
-                    new RuleOperationResult(RuleOperationResult.RuleOperationStatus.SUCCESS,ruleMapper.map(rule.get())));
+                    new QPOperationResult(QPOperationResult.QPOperationStatus.SUCCESS, qualityProfile),
+                    new RuleOperationResult(RuleOperationResult.RuleOperationStatus.SUCCESS, rule));
+        } else {
+            return new QPAndRuleOperationResult(QPAndRuleOperationResult.QPAndRuleOperationStatus.RULE_ALREADY_IN_QP,
+                    new QPOperationResult(QPOperationResult.QPOperationStatus.SUCCESS, qualityProfile),
+                    new RuleOperationResult(RuleOperationResult.RuleOperationStatus.SUCCESS, rule));
         }
-        else {
+    }
+
+    @Override
+    public QPAndRuleOperationResult removeRuleFromQualityProfile(String ruleName, String profileName) {
+        var qp = qpRepository.findByName(profileName);
+        if (qp.isEmpty()) {
+            return new QPAndRuleOperationResult(QPAndRuleOperationResult.QPAndRuleOperationStatus.SUCCESS,
+                    new QPOperationResult(NO_SUCH_QUALITY_PROFILE, new QualityProfile(profileName)),
+                    new RuleOperationResult(RuleOperationResult.RuleOperationStatus.SUCCESS,
+                            null));
+        }
+        QualityProfile qualityProfile = qualityProfileMapper.map(qp.get());
+        var rule = rules.get(ruleName);
+        if (null == rule) {
+            return new QPAndRuleOperationResult(QPAndRuleOperationResult.QPAndRuleOperationStatus.SUCCESS,
+                    new QPOperationResult(QPOperationResult.QPOperationStatus.SUCCESS, qualityProfile),
+                    new RuleOperationResult(RuleOperationResult.RuleOperationStatus.NO_SUCH_RULE,
+                            null));
+        }
+        RuleOperationResult qpr = qualityProfile.removeRule(ruleName);
+        if (qpr.getStatus() == SUCCESS) {
+            qpRepository.save(qualityProfileMapper.map(qualityProfile));
+            return new QPAndRuleOperationResult(QPAndRuleOperationResult.QPAndRuleOperationStatus.SUCCESS,
+                    new QPOperationResult(QPOperationResult.QPOperationStatus.SUCCESS, qualityProfile),
+                    new RuleOperationResult(RuleOperationResult.RuleOperationStatus.SUCCESS, rule));
+        } else {
             return new QPAndRuleOperationResult(QPAndRuleOperationResult.QPAndRuleOperationStatus.RULE_NOT_IN_QP,
                     new QPOperationResult(QPOperationResult.QPOperationStatus.SUCCESS, qualityProfile),
-                    new RuleOperationResult(RuleOperationResult.RuleOperationStatus.SUCCESS, ruleMapper.map(rule.get())));
+                    new RuleOperationResult(RuleOperationResult.RuleOperationStatus.SUCCESS, rule));
         }
 
     }
@@ -151,7 +143,7 @@ public class RulesAndQPManagerClass implements RulesAndQPManager {
     public Collection<QualityProfile> getAllQualityProfiles() {
         List<QualityProfileEntity> qualityProfileEntityList = qpRepository.findAll();
         List<QualityProfile> qualityProfiles = new ArrayList<>();
-        for(var it : qualityProfileEntityList){
+        for (var it : qualityProfileEntityList) {
             qualityProfiles.add(qualityProfileMapper.map(it));
         }
         return qualityProfiles;
@@ -159,18 +151,40 @@ public class RulesAndQPManagerClass implements RulesAndQPManager {
 
     @Override
     public Rule getRule(String ruleName) {
-        var ruleEntity = ruleRepository.findByName(ruleName);
-        return ruleMapper.map(ruleEntity.get());
+        if (null == rules) {
+            readRulesFromJson();
+        }
+        return rules.get(ruleName);
+    }
+
+    private void readRulesFromJson() {
+        try {
+            rules = new HashMap<>();
+            final JSONParser parser = new JSONParser();
+            final String json = new String(getClass().getResourceAsStream("rules.json").readAllBytes(),
+                    StandardCharsets.UTF_8);
+            final JSONArray rulesObject = (JSONArray) parser.parse(json);
+            for (Object ruleObj : rulesObject) {
+                final JSONObject jsonObject = (JSONObject) ruleObj;
+                final String ruleName = (String) jsonObject.get("name");
+                final Rule rule = new Rule(ruleName, (String) jsonObject.get("oid"));
+                rules.put(ruleName, rule);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public Collection<Rule> getAllRules() {
-        var entityList = ruleRepository.findAll();
-        List<Rule> rules = new ArrayList<>();
-
-        for(var it : entityList){
-            rules.add(ruleMapper.map(it));
+        if (null == rules) {
+            readRulesFromJson();
         }
-        return rules;
+        return rules.values();
+    }
+
+    @Override
+    public void deleteAllQPs() {
+        qpRepository.deleteAll();
     }
 }

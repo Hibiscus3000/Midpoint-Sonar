@@ -3,12 +3,30 @@ version: "3.9"
 services:
   midpoint_sonar:
     build: .
+    networks:
+      - net
+    volumes:
+      - midpoint_home:/app/midpoint/
     ports:
       - "15000:15000"
 
   postgres:
     image: postgres
+    container_name: midpointsonar_db
+    networks:
+      - net
     environment:
       - POSTGRES_PASSWORD=postgres
     ports:
-      - "15001:5432"
+      - "127.0.0.1:15001:5432"
+
+volumes:
+  midpoint_home:
+    external: true
+    name: book-midpoint_home-chapter-2
+
+networks:
+  net:
+    external: true
+    name: book_net
+    driver: bridge

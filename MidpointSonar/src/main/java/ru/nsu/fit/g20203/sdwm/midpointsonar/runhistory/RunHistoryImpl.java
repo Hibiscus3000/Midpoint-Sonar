@@ -7,11 +7,12 @@ import ru.nsu.fit.g20203.sdwm.midpointsonar.entity.RuleLoadResultEntity;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.mapper.QPRunResultMapper;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.mapper.RuleLoadResultMapper;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.repositories.QPRunResultRepository;
-import ru.nsu.fit.g20203.sdwm.midpointsonar.repositories.RuleLoadResultRepo;
+import ru.nsu.fit.g20203.sdwm.midpointsonar.repositories.RuleLoadResultRepository;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.result.async.QPRunResult;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.result.async.RuleLoadResult;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 public class RunHistoryImpl implements RunHistory {
     private final QPRunResultRepository qpRunResultRepo;
     private final QPRunResultMapper qpRunResultMapper;
-    private final RuleLoadResultRepo ruleLoadResultRepo;
+    private final RuleLoadResultRepository ruleLoadResultRepo;
     private final RuleLoadResultMapper ruleLoadResultMapper;
 
     @Override
@@ -31,38 +32,17 @@ public class RunHistoryImpl implements RunHistory {
     @Override
     public RuleLoadResult getLoadResult(Integer loadId) {
         Optional<RuleLoadResultEntity> result = ruleLoadResultRepo.findById(loadId);
-
         return result.map(ruleLoadResultMapper::map).orElse(null);
     }
 
     @Override
-    public Collection<QPRunResult> getRunHistory() {
-        var qps =  qpRunResultRepo.findAll();
-        List<QPRunResult> results = new ArrayList<>();
-        for(var it : qps){
-            results.add(qpRunResultMapper.map(it));
-        }
-        return results;
-    }
-
-    @Override
-    public Collection<RuleLoadResult> getLoadHistory() {
-        var entities =  ruleLoadResultRepo.findAll();
-        List<RuleLoadResult> results = new ArrayList<>();
-        for(var it : entities){
-            results.add(ruleLoadResultMapper.map(it));
-        }
-        return results;
-    }
-
-    @Override
-    public Map<Integer, QPRunResult> getRunHistory1() {
+    public Map<Integer, QPRunResult> getRunHistory() {
         return qpRunResultRepo.findAll().stream().collect(Collectors.toMap(qpRunResultEntity -> qpRunResultEntity.getId(),
                 qpRunResultEntity -> qpRunResultMapper.map(qpRunResultEntity)));
     }
 
     @Override
-    public Map<Integer, RuleLoadResult> getLoadHistory1() {
+    public Map<Integer, RuleLoadResult> getLoadHistory() {
         return ruleLoadResultRepo.findAll().stream().collect(Collectors.toMap(ruleLoadResultEntity -> ruleLoadResultEntity.getId(),
                 ruleLoadResultEntity -> ruleLoadResultMapper.map(ruleLoadResultEntity)));
     }

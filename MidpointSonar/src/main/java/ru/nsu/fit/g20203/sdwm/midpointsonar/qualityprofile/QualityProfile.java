@@ -24,6 +24,9 @@ public class QualityProfile {
     }
 
     public RuleOperationResult addRule(Rule rule) {
+        if (null == rule) {
+            return new RuleOperationResult(RuleOperationResult.RuleOperationStatus.NO_SUCH_RULE, null);
+        }
         rules.put(rule.getName(), rule);
         return new RuleOperationResult(RuleOperationResult.RuleOperationStatus.SUCCESS, rule);
     }

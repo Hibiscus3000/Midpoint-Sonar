@@ -1,8 +1,7 @@
 package ru.nsu.fit.g20203.sdwm.midpointsonar.entity;
 
+import jakarta.persistence.*;
 import lombok.Data;
-
-import javax.persistence.*;
 
 @Table(name = "rule_run_result")
 @Entity
@@ -20,7 +19,6 @@ public class RuleRunResultEntity {
     @Column(name = "status")
     private String status;
 
-
-    @ManyToOne
-    private QPRunResultEntity qpRunResult;
+//    @ManyToMany
+//    private List<MidPointSonarObject> midPointSonarObjects;
 }
