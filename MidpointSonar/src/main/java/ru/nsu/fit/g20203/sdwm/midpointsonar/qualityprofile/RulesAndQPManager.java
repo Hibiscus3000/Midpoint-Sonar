@@ -24,4 +24,6 @@ public interface RulesAndQPManager {
     Rule getRule(String ruleName);
 
     Collection<Rule> getAllRules();
+
+    void deleteAllQPs();
 }

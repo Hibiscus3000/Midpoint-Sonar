@@ -11,7 +11,8 @@ import ru.nsu.fit.g20203.sdwm.midpointsonar.repositories.RuleLoadResultRepositor
 import ru.nsu.fit.g20203.sdwm.midpointsonar.result.async.QPRunResult;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.result.async.RuleLoadResult;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -35,33 +36,13 @@ public class RunHistoryImpl implements RunHistory {
     }
 
     @Override
-    public Collection<QPRunResult> getRunHistory() {
-        var qps =  qpRunResultRepo.findAll();
-        List<QPRunResult> results = new ArrayList<>();
-        for(var it : qps){
-            results.add(qpRunResultMapper.map(it));
-        }
-        return results;
-    }
-
-    @Override
-    public Collection<RuleLoadResult> getLoadHistory() {
-        var entities =  ruleLoadResultRepo.findAll();
-        List<RuleLoadResult> results = new ArrayList<>();
-        for(var it : entities){
-            results.add(ruleLoadResultMapper.map(it));
-        }
-        return results;
-    }
-
-    @Override
-    public Map<Integer, QPRunResult> getRunHistory1() {
+    public Map<Integer, QPRunResult> getRunHistory() {
         return qpRunResultRepo.findAll().stream().collect(Collectors.toMap(qpRunResultEntity -> qpRunResultEntity.getId(),
                 qpRunResultEntity -> qpRunResultMapper.map(qpRunResultEntity)));
     }
 
     @Override
-    public Map<Integer, RuleLoadResult> getLoadHistory1() {
+    public Map<Integer, RuleLoadResult> getLoadHistory() {
         return ruleLoadResultRepo.findAll().stream().collect(Collectors.toMap(ruleLoadResultEntity -> ruleLoadResultEntity.getId(),
                 ruleLoadResultEntity -> ruleLoadResultMapper.map(ruleLoadResultEntity)));
     }
