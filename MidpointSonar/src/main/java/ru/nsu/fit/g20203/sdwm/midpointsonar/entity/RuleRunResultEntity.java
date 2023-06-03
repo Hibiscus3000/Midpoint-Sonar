@@ -19,7 +19,6 @@ public class RuleRunResultEntity {
     @Column(name = "status")
     private String status;
 
-
-    @ManyToOne
-    private QPRunResultEntity qpRunResult;
+//    @ManyToMany
+//    private List<MidPointSonarObject> midPointSonarObjects;
 }
