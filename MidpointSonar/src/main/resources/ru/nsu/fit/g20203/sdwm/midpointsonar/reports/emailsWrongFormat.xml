@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2017-2022 Evolveum
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<report xmlns="http://midpoint.evolveum.com/xml/ns/public/common/common-3"
+        xmlns:q="http://prism.evolveum.com/xml/ns/public/query-3"
+        oid="11100000-1111-0000-0000-000000000012" version="1">
+
+    <name>Users with email without their lastName</name>
+
+    <assignment>
+        <targetRef oid="00000000-0000-0000-0000-000000000171" relation="default" type="ArchetypeType">
+            <!-- Collection report -->
+        </targetRef>
+    </assignment>
+    <archetypeRef oid="00000000-0000-0000-0000-000000000171" relation="default" type="ArchetypeType">
+        <!-- Collection report -->
+    </archetypeRef>
+    <roleMembershipRef oid="00000000-0000-0000-0000-000000000171" relation="default" type="ArchetypeType">
+        <!-- Collection report -->
+    </roleMembershipRef>
+    <objectCollection>
+        <collection>
+            <filter>
+                <q:and>
+                    <q:ref>
+                        <q:path>resourceRef</q:path>
+                        <q:value oid="03c3ceea-78e2-11e6-954d-dfdfa9ace0cf"/>
+                    </q:ref>
+                    <q:equal>
+                        <q:path>kind</q:path>
+                        <q:value>account</q:value>
+                    </q:equal>
+                </q:and>
+
+            </filter>
+            <!--
+            <collectionRef oid="72b1f98e-f587-4b9f-b92b-72e251dbb244" relation="default" type="ObjectCollectionType">
+                &lt;!&ndash; Account shadow R1 &ndash;&gt;
+            </collectionRef>
+            -->
+        </collection>
+
+
+        <view>
+            <identifier>default-shadow</identifier>
+
+            <column>
+                <name>nameColumn</name>
+                <path>attributes/employeenumber</path>
+                <!--                <path>attributes/name</path>-->
+                <display>
+                    <label>Name</label>
+                </display>
+            </column>
+            <column>
+                <name>firstNameColumn</name>
+                <path>attributes/firstname</path>
+                <display>
+                    <label>Given name</label>
+                </display>
+                <previousColumn>nameColumn</previousColumn>
+            </column>
+            <column>
+                <name>lastNameColumn</name>
+                <path>attributes/lastname</path>
+                <display>
+                    <label>Family name</label>
+                </display>
+                <previousColumn>firstNameColumn</previousColumn>
+            </column>
+            <column>
+                <name>fullNameColumn</name>
+                <path>attributes/fullname</path>
+                <display>
+                    <label>Full name</label>
+                </display>
+                <previousColumn>lastNameColumn</previousColumn>
+            </column>
+            <column>
+                <name>emailColumn</name>
+                <display>
+                    <label>Email</label>
+                </display>
+                <previousColumn>fullNameColumn</previousColumn>
+                <export>
+                    <expression>
+                        <script>
+                            <code>
+                                import com.evolveum.midpoint.xml.ns._public.common.common_3.UserType;
+                                import com.evolveum.midpoint.prism.path.ItemPath;
+                                import org.apache.commons.lang3.StringUtils;
+
+                                user = midpoint.searchShadowOwner(object.getOid());
+                                return user.asObjectable().getEmailAddress();
+                            </code>
+                        </script>
+                    </expression>
+                </export>
+            </column>
+
+
+            <type>ShadowType</type>
+        </view>
+
+
+        <condition>
+            <script>
+                <code>
+                    import com.evolveum.midpoint.xml.ns._public.common.common_3.UserType;
+                    import com.evolveum.midpoint.prism.path.ItemPath;
+                    import org.apache.commons.lang3.StringUtils;
+
+                    shadowAttributes = object.getAttributes().asPrismContainerValue()
+                    user = midpoint.searchShadowOwner(object.getOid());
+
+
+                    firstName = shadowAttributes.findProperty(ItemPath.create("firstname"));
+                    lastName = shadowAttributes.findProperty(ItemPath.create("lastname"));
+                    email = user.asObjectable().getEmailAddress();
+
+                    firstNameFirstLetter = firstName.getRealValue().getAt(0).toLowerCase();
+                    searchedSubstring = firstNameFirstLetter + "." + lastName.getRealValue().toLowerCase()
+
+                    if (email != null){
+                    if (!email.contains(searchedSubstring))
+                    return true
+                    }
+
+
+                    return false;
+                </code>
+            </script>
+        </condition>
+        <useOnlyReportView>true</useOnlyReportView>
+    </objectCollection>
+</report>
