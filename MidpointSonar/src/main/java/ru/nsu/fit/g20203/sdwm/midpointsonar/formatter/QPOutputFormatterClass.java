@@ -10,10 +10,6 @@ import ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.RuleOperationResult;
 
 import java.util.Collection;
 
-import static ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.QPAndRuleOperationResult.QPAndRuleOperationStatus.RULE_ALREADY_IN_QP;
-import static ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.QPAndRuleOperationResult.QPAndRuleOperationStatus.RULE_NOT_IN_QP;
-import static ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.QPOperationResult.QPOperationStatus.NO_SUCH_QUALITY_PROFILE;
-import static ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.QPOperationResult.QPOperationStatus.QP_WITH_GIVEN_NAME_ALREADY_EXISTS;
 import static ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.RuleOperationResult.RuleOperationStatus.NO_SUCH_RULE;
 
 @Component
@@ -22,7 +18,7 @@ public class QPOutputFormatterClass implements QPOutputFormatter{
         if (null != qualityProfile) {
             StringBuilder formattedQp = new StringBuilder();
             String name = qualityProfile.getName();
-            formattedQp.append("Quality profile with name ").append(name).append(" contains:\n");
+            formattedQp.append("Quality profile with name \"").append(name).append("\" contains:\n");
             for (Rule rule : qualityProfile.getAllRules()) {
                 formattedQp.append(formatRule(rule));
             }
@@ -53,30 +49,45 @@ public class QPOutputFormatterClass implements QPOutputFormatter{
 
     public String formatQPOperationResult(QPOperationResult qpOperationResult) {
         StringBuilder formattedQPOperationResult = new StringBuilder();
-        switch (qpOperationResult.getStatus()) {
-            case NO_SUCH_QUALITY_PROFILE:
-                formattedQPOperationResult.append("There is no Quality Profile with name " +
-                        qpOperationResult.getQualityProfile().getName() + "\n");
-                break;
-            case QP_WITH_GIVEN_NAME_ALREADY_EXISTS:
-                formattedQPOperationResult.append("Quality Profile with name " +
-                        qpOperationResult.getQualityProfile().getName() + " already exists.\n");
-                break;
-            case SUCCESS:
-                formattedQPOperationResult.append("Success on Quality Profile with name " +
-                        qpOperationResult.getQualityProfile().getName() + "\n");
-                break;
+        if (null != qpOperationResult.getQualityProfile()) {
+            switch (qpOperationResult.getStatus()) {
+                case NO_SUCH_QUALITY_PROFILE:
+                    formattedQPOperationResult
+                            .append("There is no Quality Profile with name \"")
+                            .append(qpOperationResult.getQualityProfile().getName())
+                            .append("\"\n");
+                    break;
+                case QP_WITH_GIVEN_NAME_ALREADY_EXISTS:
+                    formattedQPOperationResult
+                            .append("Quality Profile with name \"")
+                            .append(qpOperationResult.getQualityProfile().getName())
+                            .append("\" already exists.\n");
+                    break;
+                case SUCCESS:
+                    formattedQPOperationResult
+                            .append("Success on Quality Profile with name \"")
+                            .append(qpOperationResult.getQualityProfile().getName())
+                            .append("\"\n");
+                    break;
+            }
         }
         return formattedQPOperationResult.toString();
     }
 
     public String formatRuleOperationResult(RuleOperationResult ruleOperationResult) {
         StringBuilder formattedRuleOperationResult = new StringBuilder();
-        if (ruleOperationResult.getStatus() == NO_SUCH_RULE) {
-            formattedRuleOperationResult.append("There is no rule with name " +
-                    ruleOperationResult.getRule().getName());
-        } else {
-            formattedRuleOperationResult.append("Success on " + formatRule(ruleOperationResult.getRule()));
+        if (null != ruleOperationResult.getRule()) {
+            if (ruleOperationResult.getStatus() == NO_SUCH_RULE) {
+                formattedRuleOperationResult
+                        .append("There is no rule with name \"")
+                        .append(ruleOperationResult.getRule().getName())
+                        .append("\"");
+            } else {
+                formattedRuleOperationResult
+                        .append("Success on \"")
+                        .append(formatRule(ruleOperationResult.getRule()))
+                        .append("\"");
+            }
         }
         return formattedRuleOperationResult.toString();
     }
@@ -85,31 +96,45 @@ public class QPOutputFormatterClass implements QPOutputFormatter{
         StringBuilder formattedQpAndRuleOpResult = new StringBuilder();
         switch (qpAndRuleOperationResult.getStatus()) {
             case RULE_ALREADY_IN_QP:
-                formattedQpAndRuleOpResult.append(formatRule(qpAndRuleOperationResult.getRuleOperationResult().getRule()) +
-                        "already in Quality profile with name " +
-                        qpAndRuleOperationResult.getQPOperationResult().getQualityProfile().getName() + "\n");
+                formattedQpAndRuleOpResult
+                        .append(formatRule(qpAndRuleOperationResult.getRuleOperationResult().getRule()))
+                        .append("already in Quality profile with name \"")
+                        .append(qpAndRuleOperationResult.getQPOperationResult().getQualityProfile().getName())
+                        .append("\"\n");
                 break;
             case RULE_NOT_IN_QP:
-                formattedQpAndRuleOpResult.append(formatRule(qpAndRuleOperationResult.getRuleOperationResult().getRule()) +
-                        "not in Quality profile with name " +
-                        qpAndRuleOperationResult.getQPOperationResult().getQualityProfile().getName() + "\n");
+                formattedQpAndRuleOpResult
+                        .append(formatRule(qpAndRuleOperationResult.getRuleOperationResult().getRule()))
+                        .append("not in Quality profile with name \"")
+                        .append(qpAndRuleOperationResult.getQPOperationResult().getQualityProfile().getName())
+                        .append("\"\n");
                 break;
             case SUCCESS:
-                formattedQpAndRuleOpResult.append("Success on operation on " +
-                        formatRule(qpAndRuleOperationResult.getRuleOperationResult().getRule()) +
-                        "and Quality profile with name " +
-                        qpAndRuleOperationResult.getQPOperationResult().getQualityProfile().getName() + "\n");
+                formattedQpAndRuleOpResult
+                        .append("Success on operation on ")
+                        .append(formatRule(qpAndRuleOperationResult.getRuleOperationResult().getRule()))
+                        .append("and Quality profile with name \"")
+                        .append(qpAndRuleOperationResult.getQPOperationResult().getQualityProfile().getName())
+                        .append("\"\n");
                 break;
         }
 
         return formattedQpAndRuleOpResult.toString();
     }
 
+    @Override
     public String formatRule(Rule rule) {
+        if (null == rule) {
+            return "";
+        }
         StringBuilder formattedRule = new StringBuilder();
         String name = rule.getName();
         ServerTask task = rule.getServerTask();
-        formattedRule.append("Rule with name " + name + " with server task " + task + "\n");
+        formattedRule
+                .append("Rule with name \"")
+                .append(name).append("\" with server task \"")
+                .append(task)
+                .append("\"\n");
         return formattedRule.toString();
     }
 }
