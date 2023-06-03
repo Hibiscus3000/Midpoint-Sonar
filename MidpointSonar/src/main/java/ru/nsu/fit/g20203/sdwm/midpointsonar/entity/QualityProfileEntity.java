@@ -18,6 +18,6 @@ public class QualityProfileEntity {
     @Column(name = "qp_name")
     private String name;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany/*(fetch = FetchType.LAZY, cascade = CascadeType.ALL)*/
     private List<RuleEntity> rules;
 }

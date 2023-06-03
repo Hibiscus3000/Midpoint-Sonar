@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Base64;
-import java.util.concurrent.CompletableFuture;
 
 
 public class MidPoint {
@@ -31,8 +30,6 @@ public class MidPoint {
     private final static String uriEnd = "tasks";
     private String username;
     private String password;
-
-    private final static int sleepInterval = 500;
 
     private final static String containerFilePath = "/opt/midpoint/var/";
     private final static String volumeFilePath = "/app/midpoint/";
@@ -93,40 +90,25 @@ public class MidPoint {
         processBuilder.start();
     }
 
-    public CompletableFuture<String> getTaskRunResult(String oid, String uriEnd) {
+    public String getTaskRunResult(String oid, String uriEnd) throws IOException {
         if (null == oid) {
-            return CompletableFuture.completedFuture(null);
+            return null;
         }
         final CloseableHttpClient client = buildClient();
         String basicAuth = "Basic " + new String(Base64.getEncoder().encode(getUserPass().getBytes()));
         HttpGet request = new HttpGet(uri.replaceAll(MidPoint.uriEnd, uriEnd) + oid);
         request.setHeader(HttpHeaders.AUTHORIZATION, basicAuth);
-        return CompletableFuture.supplyAsync(() -> {
-            do {
-                try {
-                    final HttpResponse response = client.execute(request);
-                    if (2 == response.getStatusLine().getStatusCode() / 100) {
-                        HttpEntity entity = response.getEntity();
-                        InputStream inputStream = entity.getContent();
-                        try (BufferedReader in = new BufferedReader(new InputStreamReader(inputStream))) {
-                            final StringBuilder stringBuilder = new StringBuilder();
-                            String inputLine;
-                            while ((inputLine = in.readLine()) != null)
-                                stringBuilder.append(inputLine);
-                            client.close();
-                            return new String(stringBuilder);
-                        }
-                    }
-                    Thread.sleep(sleepInterval);
-                } catch (Exception e) {
-                    try {
-                        client.close();
-                    } catch (IOException ex) {
-                    }
-                    return null;
-                }
-            } while (true);
-        });
+        final HttpResponse response = client.execute(request);
+        HttpEntity entity = response.getEntity();
+        InputStream inputStream = entity.getContent();
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(inputStream))) {
+            final StringBuilder stringBuilder = new StringBuilder();
+            String inputLine;
+            while ((inputLine = in.readLine()) != null)
+                stringBuilder.append(inputLine);
+            client.close();
+            return new String(stringBuilder);
+        }
     }
 
     public String getFilePath(String filePath) {

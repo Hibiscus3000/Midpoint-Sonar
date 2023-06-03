@@ -4,10 +4,12 @@ import ru.nsu.fit.g20203.sdwm.midpointsonar.CSVParser;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.CSVParserClass;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.qualityprofile.Rule;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.result.Status;
+import ru.nsu.fit.g20203.sdwm.midpointsonar.result.async.RuleLoadResult;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.result.async.RuleRunResult;
 import ru.nsu.fit.g20203.sdwm.midpointsonar.result.sync.RuleOperationResult;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -15,6 +17,8 @@ import java.util.concurrent.ExecutionException;
 public class RuleRunner {
 
     private final CSVParser csvParser;
+
+    private final static int sleepInterval = 500;
 
     private RuleRunner() {
         csvParser = new CSVParserClass();
@@ -34,6 +38,7 @@ public class RuleRunner {
         try {
             MidPoint.getInstance().runTask(rule.getServerTask().getOid());
             registerResultWaiting(rule, result);
+            result.setRuleLoadResult(RuleLoadResult.createSuccessful());
         } catch (Exception e) {
             result.setRuleRunStatus(CompletableFuture.completedFuture(Status.ERROR));
         }
@@ -41,43 +46,59 @@ public class RuleRunner {
     }
 
     private void registerResultWaiting(Rule rule, RuleRunResult result) throws IOException, ExecutionException, InterruptedException {
-        result.setObjects(MidPoint
-                .getInstance()
-                .getTaskRunResult(rule.getServerTask().getOid(), "tasks")
-                .thenComposeAsync(xmlWithFilePathReportDataRef -> {
+        result.setObjects(CompletableFuture.supplyAsync(() -> {
                     try {
-                        if (null != xmlWithFilePathReportDataRef) {
-                            return MidPoint
+                        String dataRefOID = null;
+                        while (null == dataRefOID) {
+                            final String xmlFileWithDataRef = MidPoint
                                     .getInstance()
-                                    .getTaskRunResult(MidPointXMLParser
-                                                    .getReportDataRefOID(xmlWithFilePathReportDataRef),
-                                            "reportData");
-                        } else {
-                            return CompletableFuture.completedFuture(null);
-                        }
-                    } catch (Exception e) {
-                        return CompletableFuture.completedFuture(null);
-                    }
-                })
-                .thenApplyAsync(filePathXml ->
-                {
-                    try {
-                        if (null != filePathXml) {
-                            String filePath = MidPointXMLParser.getFilePath(filePathXml);
-                            if (null != filePath) {
-                                return csvParser.parseReport(MidPoint.getInstance().getFilePath(filePath));
-                            } else {
-                                return null;
+                                    .getTaskRunResult(rule.getServerTask().getOid(), "tasks");
+                            dataRefOID = MidPointXMLParser.getReportDataRefOID(xmlFileWithDataRef);
+                            if (null == dataRefOID) {
+                                Thread.sleep(sleepInterval);
                             }
-                        } else {
-                            return null;
                         }
+                        return dataRefOID;
                     } catch (Exception e) {
                         return null;
                     }
+                })
+                .thenApplyAsync(dataRefOID -> {
+                    try {
+                        if (null == dataRefOID) {
+                            return null;
+                        }
+                        String filePath = null;
+                        while (null == filePath) {
+                            final String xmlFileWithDataRef = MidPoint
+                                    .getInstance()
+                                    .getTaskRunResult(dataRefOID, "reportData");
+                            filePath = MidPointXMLParser.getFilePath(xmlFileWithDataRef);
+                            if (null == filePath) {
+                                Thread.sleep(sleepInterval);
+                            }
+                        }
+                        return filePath;
+                    } catch (Exception e) {
+                        return null;
+                    }
+                })
+                .thenApplyAsync(filePath ->
+                {
+                    try {
+                        if (null != filePath) {
+                            final Collection<MidPointSonarObject> midPointSonarObjs = csvParser.parseReport(MidPoint.getInstance().getFilePath(filePath));
+                            result.setRuleRunStatus(CompletableFuture.completedFuture(Status.ERROR));
+                            return midPointSonarObjs;
+                        } else {
+                            result.setRuleRunStatus(CompletableFuture.completedFuture(Status.ERROR));
+                            return null;
+                        }
+                    } catch (Exception e) {
+                        result.setRuleRunStatus(CompletableFuture.completedFuture(Status.ERROR));
+                        return null;
+                    }
                 }));
-        result.getObjects().get();
-        System.out.println("hello");
     }
 
     public static RuleRunner getInstance() {
