@@ -3,6 +3,9 @@ version: "3.9"
 services:
   midpoint_sonar:
     build: .
+    depends_on:
+      postgres:
+        condition: service_started
     networks:
       - net
     volumes:
